@@ -1,0 +1,475 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		960A280918A22D00000520B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A280818A22D00000520B2 /* Foundation.framework */; };
+		960A280B18A22D00000520B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A280A18A22D00000520B2 /* CoreGraphics.framework */; };
+		960A280D18A22D00000520B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A280C18A22D00000520B2 /* UIKit.framework */; };
+		960A281318A22D00000520B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 960A281118A22D00000520B2 /* InfoPlist.strings */; };
+		960A281518A22D00000520B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 960A281418A22D00000520B2 /* main.m */; };
+		960A281918A22D00000520B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 960A281818A22D00000520B2 /* AppDelegate.m */; };
+		960A281C18A22D00000520B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 960A281A18A22D00000520B2 /* Main.storyboard */; };
+		960A281F18A22D00000520B2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 960A281E18A22D00000520B2 /* ViewController.m */; };
+		960A282118A22D00000520B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 960A282018A22D00000520B2 /* Images.xcassets */; };
+		960A282818A22D00000520B2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A282718A22D00000520B2 /* XCTest.framework */; };
+		960A282918A22D00000520B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A280818A22D00000520B2 /* Foundation.framework */; };
+		960A282A18A22D00000520B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960A280C18A22D00000520B2 /* UIKit.framework */; };
+		960A283218A22D00000520B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 960A283018A22D00000520B2 /* InfoPlist.strings */; };
+		960A283418A22D00000520B2 /* mageiosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 960A283318A22D00000520B2 /* mageiosTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		960A282B18A22D00000520B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 960A27FD18A22D00000520B2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 960A280418A22D00000520B2;
+			remoteInfo = mageios;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		960A280518A22D00000520B2 /* mageios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mageios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		960A280818A22D00000520B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		960A280A18A22D00000520B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		960A280C18A22D00000520B2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		960A281018A22D00000520B2 /* mageios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mageios-Info.plist"; sourceTree = "<group>"; };
+		960A281218A22D00000520B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		960A281418A22D00000520B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		960A281618A22D00000520B2 /* mageios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mageios-Prefix.pch"; sourceTree = "<group>"; };
+		960A281718A22D00000520B2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		960A281818A22D00000520B2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		960A281B18A22D00000520B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		960A281D18A22D00000520B2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		960A281E18A22D00000520B2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		960A282018A22D00000520B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		960A282618A22D00000520B2 /* mageiosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mageiosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		960A282718A22D00000520B2 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		960A282F18A22D00000520B2 /* mageiosTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mageiosTests-Info.plist"; sourceTree = "<group>"; };
+		960A283118A22D00000520B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		960A283318A22D00000520B2 /* mageiosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mageiosTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		960A280218A22D00000520B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A280B18A22D00000520B2 /* CoreGraphics.framework in Frameworks */,
+				960A280D18A22D00000520B2 /* UIKit.framework in Frameworks */,
+				960A280918A22D00000520B2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		960A282318A22D00000520B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A282818A22D00000520B2 /* XCTest.framework in Frameworks */,
+				960A282A18A22D00000520B2 /* UIKit.framework in Frameworks */,
+				960A282918A22D00000520B2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		960A27FC18A22D00000520B2 = {
+			isa = PBXGroup;
+			children = (
+				960A280E18A22D00000520B2 /* mageios */,
+				960A282D18A22D00000520B2 /* mageiosTests */,
+				960A280718A22D00000520B2 /* Frameworks */,
+				960A280618A22D00000520B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		960A280618A22D00000520B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				960A280518A22D00000520B2 /* mageios.app */,
+				960A282618A22D00000520B2 /* mageiosTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		960A280718A22D00000520B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				960A280818A22D00000520B2 /* Foundation.framework */,
+				960A280A18A22D00000520B2 /* CoreGraphics.framework */,
+				960A280C18A22D00000520B2 /* UIKit.framework */,
+				960A282718A22D00000520B2 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		960A280E18A22D00000520B2 /* mageios */ = {
+			isa = PBXGroup;
+			children = (
+				960A281718A22D00000520B2 /* AppDelegate.h */,
+				960A281818A22D00000520B2 /* AppDelegate.m */,
+				960A281A18A22D00000520B2 /* Main.storyboard */,
+				960A281D18A22D00000520B2 /* ViewController.h */,
+				960A281E18A22D00000520B2 /* ViewController.m */,
+				960A282018A22D00000520B2 /* Images.xcassets */,
+				960A280F18A22D00000520B2 /* Supporting Files */,
+			);
+			path = mageios;
+			sourceTree = "<group>";
+		};
+		960A280F18A22D00000520B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				960A281018A22D00000520B2 /* mageios-Info.plist */,
+				960A281118A22D00000520B2 /* InfoPlist.strings */,
+				960A281418A22D00000520B2 /* main.m */,
+				960A281618A22D00000520B2 /* mageios-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		960A282D18A22D00000520B2 /* mageiosTests */ = {
+			isa = PBXGroup;
+			children = (
+				960A283318A22D00000520B2 /* mageiosTests.m */,
+				960A282E18A22D00000520B2 /* Supporting Files */,
+			);
+			path = mageiosTests;
+			sourceTree = "<group>";
+		};
+		960A282E18A22D00000520B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				960A282F18A22D00000520B2 /* mageiosTests-Info.plist */,
+				960A283018A22D00000520B2 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		960A280418A22D00000520B2 /* mageios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 960A283718A22D00000520B2 /* Build configuration list for PBXNativeTarget "mageios" */;
+			buildPhases = (
+				960A280118A22D00000520B2 /* Sources */,
+				960A280218A22D00000520B2 /* Frameworks */,
+				960A280318A22D00000520B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mageios;
+			productName = mageios;
+			productReference = 960A280518A22D00000520B2 /* mageios.app */;
+			productType = "com.apple.product-type.application";
+		};
+		960A282518A22D00000520B2 /* mageiosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 960A283A18A22D00000520B2 /* Build configuration list for PBXNativeTarget "mageiosTests" */;
+			buildPhases = (
+				960A282218A22D00000520B2 /* Sources */,
+				960A282318A22D00000520B2 /* Frameworks */,
+				960A282418A22D00000520B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				960A282C18A22D00000520B2 /* PBXTargetDependency */,
+			);
+			name = mageiosTests;
+			productName = mageiosTests;
+			productReference = 960A282618A22D00000520B2 /* mageiosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		960A27FD18A22D00000520B2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "KTPL - Mobile Development";
+				TargetAttributes = {
+					960A282518A22D00000520B2 = {
+						TestTargetID = 960A280418A22D00000520B2;
+					};
+				};
+			};
+			buildConfigurationList = 960A280018A22D00000520B2 /* Build configuration list for PBXProject "mageios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 960A27FC18A22D00000520B2;
+			productRefGroup = 960A280618A22D00000520B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				960A280418A22D00000520B2 /* mageios */,
+				960A282518A22D00000520B2 /* mageiosTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		960A280318A22D00000520B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A282118A22D00000520B2 /* Images.xcassets in Resources */,
+				960A281318A22D00000520B2 /* InfoPlist.strings in Resources */,
+				960A281C18A22D00000520B2 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		960A282418A22D00000520B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A283218A22D00000520B2 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		960A280118A22D00000520B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A281F18A22D00000520B2 /* ViewController.m in Sources */,
+				960A281918A22D00000520B2 /* AppDelegate.m in Sources */,
+				960A281518A22D00000520B2 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		960A282218A22D00000520B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				960A283418A22D00000520B2 /* mageiosTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		960A282C18A22D00000520B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 960A280418A22D00000520B2 /* mageios */;
+			targetProxy = 960A282B18A22D00000520B2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		960A281118A22D00000520B2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				960A281218A22D00000520B2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		960A281A18A22D00000520B2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				960A281B18A22D00000520B2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		960A283018A22D00000520B2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				960A283118A22D00000520B2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		960A283518A22D00000520B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		960A283618A22D00000520B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		960A283818A22D00000520B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mageios/mageios-Prefix.pch";
+				INFOPLIST_FILE = "mageios/mageios-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		960A283918A22D00000520B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mageios/mageios-Prefix.pch";
+				INFOPLIST_FILE = "mageios/mageios-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		960A283B18A22D00000520B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mageios.app/mageios";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mageios/mageios-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "mageiosTests/mageiosTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		960A283C18A22D00000520B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mageios.app/mageios";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mageios/mageios-Prefix.pch";
+				INFOPLIST_FILE = "mageiosTests/mageiosTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		960A280018A22D00000520B2 /* Build configuration list for PBXProject "mageios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				960A283518A22D00000520B2 /* Debug */,
+				960A283618A22D00000520B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		960A283718A22D00000520B2 /* Build configuration list for PBXNativeTarget "mageios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				960A283818A22D00000520B2 /* Debug */,
+				960A283918A22D00000520B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		960A283A18A22D00000520B2 /* Build configuration list for PBXNativeTarget "mageiosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				960A283B18A22D00000520B2 /* Debug */,
+				960A283C18A22D00000520B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 960A27FD18A22D00000520B2 /* Project object */;
+}
