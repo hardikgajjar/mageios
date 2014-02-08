@@ -1,0 +1,154 @@
+//
+//  HomeViewController.m
+//  mageios
+//
+//  Created by KTPL - Mobile Development on 05/02/14.
+//  Copyright (c) 2014 KTPL - Mobile Development. All rights reserved.
+//
+
+#import "HomeViewController.h"
+#import "XMLDictionary.h"
+#import "UIColor+CreateMethods.h"
+#import "Service.h"
+#import "Home.h"
+
+
+@interface HomeViewController () {
+    Service *service;
+    Home *home;
+}
+@end
+
+@implementation HomeViewController
+
+@synthesize home_banner, categories_placeholder;
+
+- (void) observer:(NSNotification *) notification
+{
+    // perform ui updates from main thread so that they updates correctly
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
+        return;
+    }
+    
+    if ([[notification name] isEqualToString:@"serviceNotification"]) {
+        [self updateCommonStyles];
+        home = [[Home alloc] init];
+    } else if ([[notification name] isEqualToString:@"homeDataLoadedNotification"]) {
+        [self updateCategories];
+    }
+}
+
+- (void)addObservers
+{
+    // Add service observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"serviceNotification"
+                                               object:nil];
+    // Add home observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"homeDataLoadedNotification"
+                                               object:nil];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [self addObservers];
+    
+    service = [Service getInstance];
+    
+    if (service.initialized) {
+        [self updateCommonStyles];
+        home = [[Home alloc] init];
+    }
+}
+
+- (void)updateCommonStyles
+{
+    //NSLog(@"%@", service.config_data);
+    
+    // set backgroundcolor
+    [self.view setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0]];
+    
+    // set background Image
+    if ([service.config_data valueForKeyPath:@"body.backgroundImage"] != nil) {
+        UIImage *banner = [UIImage imageWithData:
+                           [NSData dataWithContentsOfURL:
+                            [NSURL URLWithString:[service.config_data valueForKeyPath:@"body.bannerImage"]]]];
+        [self.home_banner setImage:banner];
+    }
+}
+
+- (void)updateCategories
+{
+    if ([home.data valueForKeyPath:@"categories.item"] != nil) {
+        int i=0;
+        int total_width = 0;
+        int box_w = 95;
+        int box_h = 115;
+        int padding_l = 7.5;
+        int padding_t = 7.5;
+        
+        for (NSDictionary *category in [home.data valueForKeyPath:@"categories.item"]) {
+            int x = 95*i;
+            int x1 = x;
+            if (i!=0) x1 += (i*5);
+            
+            //background view
+            UIView *background = [[UIView alloc] initWithFrame:CGRectMake(x1, 0, box_w, box_h)];
+            [background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.backgroundColor"] alpha:1.0]];
+            
+            //icon
+            UIImage *icon_image = [UIImage imageWithData:
+                               [NSData dataWithContentsOfURL:
+                                [NSURL URLWithString:[category valueForKeyPath:@"icon.@innerText"]]]];
+            UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(padding_l, padding_t, 80, 80)];
+            [icon setImage:icon_image];
+            
+            //border to icon
+            CALayer *borderLayer = [CALayer layer];
+            CGRect borderFrame = CGRectMake(0, 0, (icon.frame.size.width), (icon.frame.size.height));
+            [borderLayer setBackgroundColor:[[UIColor clearColor] CGColor]];
+            [borderLayer setFrame:borderFrame];
+            [borderLayer setBorderWidth:1.0];
+            [borderLayer setBorderColor:[[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0] CGColor]];
+            [icon.layer addSublayer:borderLayer];
+            
+            //label
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(7.5, 90, 85, 25)];
+            label.backgroundColor=[UIColor clearColor];
+            label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+            label.text = [category valueForKey:@"label"];
+            
+            [background addSubview:icon];
+            [background addSubview:label];
+
+            [self.categories_placeholder addSubview:background];
+            
+            total_width = x1 + box_w;
+            NSLog(@"%d", total_width);
+            i++;
+        }
+        self.categories_placeholder.contentSize = CGSizeMake(total_width, box_h);
+        
+    }
+}
+
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+@end
