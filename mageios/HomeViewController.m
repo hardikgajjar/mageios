@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "CategoryViewController.h"
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 #import "Service.h"
@@ -21,7 +22,7 @@
 
 @implementation HomeViewController
 
-@synthesize home_banner, categories_placeholder;
+@synthesize home_banner, categories_placeholder, loading;
 
 - (void) observer:(NSNotification *) notification
 {
@@ -36,6 +37,7 @@
         home = [[Home alloc] init];
     } else if ([[notification name] isEqualToString:@"homeDataLoadedNotification"]) {
         [self updateCategories];
+        [self.loading hide:YES];
     }
 }
 
@@ -58,6 +60,10 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    // show loading
+    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.loading.labelText = @"Loading";
+    
     [self addObservers];
     
     service = [Service getInstance];
@@ -70,8 +76,6 @@
 
 - (void)updateCommonStyles
 {
-    //NSLog(@"%@", service.config_data);
-    
     // set backgroundcolor
     [self.view setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0]];
     
@@ -82,6 +86,23 @@
                             [NSURL URLWithString:[service.config_data valueForKeyPath:@"body.bannerImage"]]]];
         [self.home_banner setImage:banner];
     }
+    
+    // set title view
+    UIView *titleview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    UIImage *nav_icon = [UIImage imageWithData:
+                       [NSData dataWithContentsOfURL:
+                        [NSURL URLWithString:[service.config_data valueForKeyPath:@"navigationBar.icon"]]]];
+    UIImageView *nav_icon_view = [[UIImageView alloc] initWithFrame:CGRectMake(110, 0, 35, 35)];
+    [nav_icon_view setImage:nav_icon];
+    
+    UILabel *nav_label = [[UILabel alloc] initWithFrame:CGRectMake(145, 0, 100, 30)];
+    nav_label.text = self.navigationItem.title;
+    nav_label.backgroundColor=[UIColor clearColor];
+    nav_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+    
+    [titleview addSubview:nav_icon_view];
+    [titleview addSubview:nav_label];
+    self.navigationItem.titleView = titleview;
 }
 
 - (void)updateCategories
@@ -101,6 +122,7 @@
             
             //background view
             UIView *background = [[UIView alloc] initWithFrame:CGRectMake(x1, 0, box_w, box_h)];
+            [background setTag:[[category valueForKey:@"entity_id"] integerValue]];
             [background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.backgroundColor"] alpha:1.0]];
             
             //icon
@@ -123,19 +145,43 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(7.5, 90, 85, 25)];
             label.backgroundColor=[UIColor clearColor];
             label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+            label.font=[label.font fontWithSize:13];
             label.text = [category valueForKey:@"label"];
             
             [background addSubview:icon];
             [background addSubview:label];
 
+            // bind touch gesture
+            UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                              action:@selector(categoryTap:)];
+            [background addGestureRecognizer:singleFingerTap];
+
             [self.categories_placeholder addSubview:background];
             
             total_width = x1 + box_w;
-            NSLog(@"%d", total_width);
             i++;
         }
         self.categories_placeholder.contentSize = CGSizeMake(total_width, box_h);
-        
+    }
+}
+
+- (void)categoryTap:(UITapGestureRecognizer *)recognizer {
+    
+    // get touched category
+    
+    for (NSDictionary *category in [home.data valueForKeyPath:@"categories.item"]) {
+        if ([[category valueForKey:@"entity_id"] integerValue] == recognizer.view.tag) {
+            
+            // open shop tab [tabs index is 0 based]
+            
+            UINavigationController *t = [self.tabBarController.viewControllers objectAtIndex:1];
+            [t popToRootViewControllerAnimated:NO];
+            
+            CategoryViewController *cat_view = [t.childViewControllers objectAtIndex:0];
+            cat_view.current_category = category;
+            
+            self.tabBarController.selectedIndex = 1;
+        }
     }
 }
 

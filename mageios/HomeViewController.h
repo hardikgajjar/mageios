@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
 
 @interface HomeViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *home_banner;
 @property (weak, nonatomic) IBOutlet UIScrollView *categories_placeholder;
+@property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 @end
