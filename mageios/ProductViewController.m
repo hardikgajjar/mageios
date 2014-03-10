@@ -9,6 +9,7 @@
 #import "ProductViewController.h"
 #import "Service.h"
 #import "Product.h"
+#import "Quote.h"
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 
@@ -20,9 +21,10 @@
 @implementation ProductViewController {
     Service *service;
     Product *product;
+    Quote   *quote;
 }
 
-@synthesize current_product,loading,product_image,price,stock_status,short_desc;
+@synthesize current_product,loading,product_image,price,stock_status,short_desc,ratings,reviewCount,reviewText,qty;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,10 +46,26 @@
     [self.loading hide:YES];
     
     if ([[notification name] isEqualToString:@"productDataLoadedNotification"]) {
-        
         [self updateProductData];
-        
+    } else if ([[notification name] isEqualToString:@"productAddedToCartNotification"]) {
+        // show continue or view cart popup
+        quote = [Quote getInstance];
+        [self showAlertWithSuccessMessage:[quote.response valueForKey:@"text"]];
     }
+}
+
+- (void)showAlertWithSuccessMessage:(NSString *)message
+{
+    if (message == nil) message = @"Product is added to cart.";
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:nil
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"Continue"
+                          otherButtonTitles:@"View Cart", nil];
+    
+    [alert show];
 }
 
 - (void)addObservers
@@ -57,7 +75,11 @@
                                              selector:@selector(observer:)
                                                  name:@"productDataLoadedNotification"
                                                object:nil];
-    
+    // Add product add to cart observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"productAddedToCartNotification"
+                                               object:nil];
 }
 
 - (void)viewDidLoad
@@ -127,6 +149,18 @@
         // set short description
         self.short_desc.text = [self.current_product valueForKey:@"short_description"];
         
+        // set review and ratings
+        self.ratings.canEdit = NO;
+        self.ratings.maxRating = 5;
+        if ([[self.current_product valueForKey:@"reviews_count"] integerValue] > 0) {
+            self.ratings.rating = [[self.current_product valueForKey:@"reviews_count"] integerValue];
+            self.reviewCount.text = [NSString stringWithFormat:@"(%@)",[self.current_product valueForKey:@"reviews_count"]];
+        } else {
+            self.ratings.hidden = YES;
+            self.reviewCount.hidden = YES;
+            self.reviewText.text = @"No Ratings";
+        }
+        
         //NSLog(@"%@", self.current_product);
     }
 }
@@ -177,5 +211,28 @@
 }
 
  */
+
+- (IBAction)addToCart:(id)sender {
+    
+    quote = [Quote getInstance];
+    
+    if (quote) {
+        
+        [self.loading show:YES];
+        
+        NSDictionary *post_data = [[NSDictionary alloc] initWithObjectsAndKeys:[self.current_product valueForKey:@"entity_id"], @"product", self.qty.text, @"qty", nil];
+        [quote addToCart:post_data];
+    }
+}
+
+#pragma mark - alert view methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) { //view cart
+        // go to cart page
+        
+    }
+}
 
 @end

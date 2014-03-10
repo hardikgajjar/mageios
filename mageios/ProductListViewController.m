@@ -240,7 +240,7 @@
     
     // set ratings
     if ([[product valueForKey:@"reviews_count"] integerValue] > 0) {
-        ASStarRatingView *staticStarRatingView = [[ASStarRatingView alloc] initWithFrame:CGRectMake(15, 100, 95, 15)];
+        ASStarRatingView *staticStarRatingView = [[ASStarRatingView alloc] initWithFrame:CGRectMake(15, 90, 85, 15)];
         staticStarRatingView.canEdit = NO;
         staticStarRatingView.maxRating = 5;
         staticStarRatingView.rating = [[product valueForKey:@"reviews_count"] integerValue];
@@ -254,7 +254,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0)
         return 50;
-    return 100;
+    return 110;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
