@@ -11,8 +11,10 @@
 @interface Quote : NSObject
 
 @property(nonatomic,retain)NSDictionary *response;
+@property(nonatomic,retain)NSDictionary *data;
 
 + (Quote *)getInstance;
+- (void)getData;
 - (void)addToCart:(NSDictionary *)data;
 
 @end

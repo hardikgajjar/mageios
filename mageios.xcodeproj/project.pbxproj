@@ -34,6 +34,7 @@
 		96316D6D18BB581D003BB5B5 /* ASStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96316D6518BB581D003BB5B5 /* ASStarRatingView.m */; };
 		9649DDE718B4CE8A005F634A /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9649DDE518B4CE8A005F634A /* MBProgressHUD.m */; };
 		9675DB1C18A3BC78001AD3F7 /* Service.m in Sources */ = {isa = PBXBuildFile; fileRef = 9675DB1B18A3BC78001AD3F7 /* Service.m */; };
+		967B5C6318CDCBEA0010B940 /* CartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 967B5C6218CDCBEA0010B940 /* CartViewController.m */; };
 		96855A3F18AA1A32009E3514 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96855A3E18AA1A32009E3514 /* CategoryViewController.m */; };
 		96855A4218AA1D72009E3514 /* XCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 96855A4118AA1D72009E3514 /* XCategory.m */; };
 		96A09EA618A5FE1F00F8055A /* UIColor+CreateMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A09EA518A5FE1F00F8055A /* UIColor+CreateMethods.m */; };
@@ -94,6 +95,8 @@
 		9649DDE618B4CE8A005F634A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		9675DB1A18A3BC78001AD3F7 /* Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Service.h; sourceTree = "<group>"; };
 		9675DB1B18A3BC78001AD3F7 /* Service.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Service.m; sourceTree = "<group>"; };
+		967B5C6118CDCBEA0010B940 /* CartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartViewController.h; sourceTree = "<group>"; };
+		967B5C6218CDCBEA0010B940 /* CartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CartViewController.m; sourceTree = "<group>"; };
 		96855A3D18AA1A32009E3514 /* CategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
 		96855A3E18AA1A32009E3514 /* CategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
 		96855A4018AA1D72009E3514 /* XCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCategory.h; sourceTree = "<group>"; };
@@ -266,6 +269,8 @@
 				96BC24BD18B75FF800F6F62A /* ProductListViewController.m */,
 				96D3CF7F18C89CAD009F54C5 /* ProductViewController.h */,
 				96D3CF8018C89CAD009F54C5 /* ProductViewController.m */,
+				967B5C6118CDCBEA0010B940 /* CartViewController.h */,
+				967B5C6218CDCBEA0010B940 /* CartViewController.m */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -416,6 +421,7 @@
 				960A281918A22D00000520B2 /* AppDelegate.m in Sources */,
 				960A281518A22D00000520B2 /* main.m in Sources */,
 				96855A4218AA1D72009E3514 /* XCategory.m in Sources */,
+				967B5C6318CDCBEA0010B940 /* CartViewController.m in Sources */,
 				960A283F18A236D2000520B2 /* HomeViewController.m in Sources */,
 				96A09EA618A5FE1F00F8055A /* UIColor+CreateMethods.m in Sources */,
 			);

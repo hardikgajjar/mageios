@@ -200,17 +200,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    /*if ([segue.identifier isEqualToString:@"loopbackSegue"]) {
+        CategoryViewController *nextController = segue.destinationViewController;
+        nextController.parent_category = sender;
+        //nextController.title = [sender valueForKeyPath:@"name"];
+    }*/
 }
 
- */
 
 - (IBAction)addToCart:(id)sender {
     
@@ -230,8 +231,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) { //view cart
-        // go to cart page
-        
+        // go to cart pages
+        [self performSegueWithIdentifier:@"cartSegue" sender:self];
     }
 }
 

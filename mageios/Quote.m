@@ -28,6 +28,46 @@ static Quote *instance =nil;
     return instance;
 }
 
+- (void)getData
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart"];
+    
+    // get cart data
+    
+    NSString *cart_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:cart_url];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *get_cart_data = [session dataTaskWithRequest:request
+                                                           completionHandler:
+                                                 ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                     NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                                     
+                                                     if ([res valueForKey:@"products"] != nil) {
+                                                         
+                                                         // store cart data
+                                                         self.data = res;
+                                                         
+                                                         // fire event
+                                                         [[NSNotificationCenter defaultCenter]
+                                                          postNotificationName:@"quoteDataLoadedNotification"
+                                                          object:self];
+                                                         
+                                                     } else {
+                                                         NSLog(@"%@", res);
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                                     }
+                                                     
+                                                 }];
+    
+    [get_cart_data resume];
+}
+
 - (void)addToCart:(NSDictionary *)data
 {
     Service *service = [Service getInstance];
