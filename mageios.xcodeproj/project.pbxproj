@@ -32,7 +32,9 @@
 		96316D6B18BB581D003BB5B5 /* selected_star.png in Resources */ = {isa = PBXBuildFile; fileRef = 96316D6318BB581D003BB5B5 /* selected_star.png */; };
 		96316D6C18BB581D003BB5B5 /* selected_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96316D6418BB581D003BB5B5 /* selected_star@2x.png */; };
 		96316D6D18BB581D003BB5B5 /* ASStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96316D6518BB581D003BB5B5 /* ASStarRatingView.m */; };
+		9648431518D0701600AEBB9A /* BillingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9648431418D0701600AEBB9A /* BillingViewController.m */; };
 		9649DDE718B4CE8A005F634A /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9649DDE518B4CE8A005F634A /* MBProgressHUD.m */; };
+		9654042E18D306D900D55EA2 /* SelectOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9654042D18D306D900D55EA2 /* SelectOptionsViewController.m */; };
 		9675DB1C18A3BC78001AD3F7 /* Service.m in Sources */ = {isa = PBXBuildFile; fileRef = 9675DB1B18A3BC78001AD3F7 /* Service.m */; };
 		967B5C6318CDCBEA0010B940 /* CartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 967B5C6218CDCBEA0010B940 /* CartViewController.m */; };
 		96855A3F18AA1A32009E3514 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96855A3E18AA1A32009E3514 /* CategoryViewController.m */; };
@@ -45,6 +47,7 @@
 		96C250EF18CAED5B0034DBFB /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C250EE18CAED5B0034DBFB /* Quote.m */; };
 		96D3CF8118C89CAD009F54C5 /* ProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D3CF8018C89CAD009F54C5 /* ProductViewController.m */; };
 		96D3CF8418C8A620009F54C5 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D3CF8318C8A620009F54C5 /* Product.m */; };
+		96FF5F3518CF31AF00012767 /* Core.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FF5F3418CF31AF00012767 /* Core.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,8 +94,12 @@
 		96316D6418BB581D003BB5B5 /* selected_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_star@2x.png"; sourceTree = "<group>"; };
 		96316D6518BB581D003BB5B5 /* ASStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASStarRatingView.m; sourceTree = "<group>"; };
 		96316D6618BB581D003BB5B5 /* ASStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASStarRatingView.h; sourceTree = "<group>"; };
+		9648431318D0701600AEBB9A /* BillingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillingViewController.h; sourceTree = "<group>"; };
+		9648431418D0701600AEBB9A /* BillingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillingViewController.m; sourceTree = "<group>"; };
 		9649DDE518B4CE8A005F634A /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		9649DDE618B4CE8A005F634A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		9654042C18D306D900D55EA2 /* SelectOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectOptionsViewController.h; sourceTree = "<group>"; };
+		9654042D18D306D900D55EA2 /* SelectOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectOptionsViewController.m; sourceTree = "<group>"; };
 		9675DB1A18A3BC78001AD3F7 /* Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Service.h; sourceTree = "<group>"; };
 		9675DB1B18A3BC78001AD3F7 /* Service.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Service.m; sourceTree = "<group>"; };
 		967B5C6118CDCBEA0010B940 /* CartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartViewController.h; sourceTree = "<group>"; };
@@ -115,6 +122,8 @@
 		96D3CF8018C89CAD009F54C5 /* ProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductViewController.m; sourceTree = "<group>"; };
 		96D3CF8218C8A620009F54C5 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
 		96D3CF8318C8A620009F54C5 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
+		96FF5F3318CF31AF00012767 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		96FF5F3418CF31AF00012767 /* Core.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Core.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +248,41 @@
 			path = stars;
 			sourceTree = "<group>";
 		};
+		9648431018D06F3E00AEBB9A /* cms */ = {
+			isa = PBXGroup;
+			children = (
+				960A283D18A236D2000520B2 /* HomeViewController.h */,
+				960A283E18A236D2000520B2 /* HomeViewController.m */,
+			);
+			name = cms;
+			sourceTree = "<group>";
+		};
+		9648431118D06F5000AEBB9A /* catalog */ = {
+			isa = PBXGroup;
+			children = (
+				96855A3D18AA1A32009E3514 /* CategoryViewController.h */,
+				96855A3E18AA1A32009E3514 /* CategoryViewController.m */,
+				96BC24BC18B75FF800F6F62A /* ProductListViewController.h */,
+				96BC24BD18B75FF800F6F62A /* ProductListViewController.m */,
+				96D3CF7F18C89CAD009F54C5 /* ProductViewController.h */,
+				96D3CF8018C89CAD009F54C5 /* ProductViewController.m */,
+				9654042C18D306D900D55EA2 /* SelectOptionsViewController.h */,
+				9654042D18D306D900D55EA2 /* SelectOptionsViewController.m */,
+			);
+			name = catalog;
+			sourceTree = "<group>";
+		};
+		9648431218D06F9900AEBB9A /* checkout */ = {
+			isa = PBXGroup;
+			children = (
+				967B5C6118CDCBEA0010B940 /* CartViewController.h */,
+				967B5C6218CDCBEA0010B940 /* CartViewController.m */,
+				9648431318D0701600AEBB9A /* BillingViewController.h */,
+				9648431418D0701600AEBB9A /* BillingViewController.m */,
+			);
+			name = checkout;
+			sourceTree = "<group>";
+		};
 		9675DB1918A3BBE1001AD3F7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,18 +303,11 @@
 		9675DB1D18A3BD46001AD3F7 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9648431218D06F9900AEBB9A /* checkout */,
+				9648431118D06F5000AEBB9A /* catalog */,
+				9648431018D06F3E00AEBB9A /* cms */,
 				960A281D18A22D00000520B2 /* ViewController.h */,
 				960A281E18A22D00000520B2 /* ViewController.m */,
-				960A283D18A236D2000520B2 /* HomeViewController.h */,
-				960A283E18A236D2000520B2 /* HomeViewController.m */,
-				96855A3D18AA1A32009E3514 /* CategoryViewController.h */,
-				96855A3E18AA1A32009E3514 /* CategoryViewController.m */,
-				96BC24BC18B75FF800F6F62A /* ProductListViewController.h */,
-				96BC24BD18B75FF800F6F62A /* ProductListViewController.m */,
-				96D3CF7F18C89CAD009F54C5 /* ProductViewController.h */,
-				96D3CF8018C89CAD009F54C5 /* ProductViewController.m */,
-				967B5C6118CDCBEA0010B940 /* CartViewController.h */,
-				967B5C6218CDCBEA0010B940 /* CartViewController.m */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -285,6 +322,8 @@
 				9649DDE618B4CE8A005F634A /* MBProgressHUD.h */,
 				96A09EA418A5FE1F00F8055A /* UIColor+CreateMethods.h */,
 				96A09EA518A5FE1F00F8055A /* UIColor+CreateMethods.m */,
+				96FF5F3318CF31AF00012767 /* Core.h */,
+				96FF5F3418CF31AF00012767 /* Core.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -344,7 +383,7 @@
 		960A27FD18A22D00000520B2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "KTPL - Mobile Development";
 				TargetAttributes = {
 					960A282518A22D00000520B2 = {
@@ -416,11 +455,14 @@
 				96855A3F18AA1A32009E3514 /* CategoryViewController.m in Sources */,
 				96D3CF8418C8A620009F54C5 /* Product.m in Sources */,
 				96D3CF8118C89CAD009F54C5 /* ProductViewController.m in Sources */,
+				9648431518D0701600AEBB9A /* BillingViewController.m in Sources */,
 				96BC24BE18B75FF800F6F62A /* ProductListViewController.m in Sources */,
+				9654042E18D306D900D55EA2 /* SelectOptionsViewController.m in Sources */,
 				96316D6D18BB581D003BB5B5 /* ASStarRatingView.m in Sources */,
 				960A281918A22D00000520B2 /* AppDelegate.m in Sources */,
 				960A281518A22D00000520B2 /* main.m in Sources */,
 				96855A4218AA1D72009E3514 /* XCategory.m in Sources */,
+				96FF5F3518CF31AF00012767 /* Core.m in Sources */,
 				967B5C6318CDCBEA0010B940 /* CartViewController.m in Sources */,
 				960A283F18A236D2000520B2 /* HomeViewController.m in Sources */,
 				96A09EA618A5FE1F00F8055A /* UIColor+CreateMethods.m in Sources */,
@@ -477,7 +519,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -516,7 +557,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -574,7 +614,6 @@
 		960A283B18A22D00000520B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mageios.app/mageios";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -597,7 +636,6 @@
 		960A283C18A22D00000520B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mageios.app/mageios";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

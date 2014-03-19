@@ -12,10 +12,10 @@
 
 @interface ProductListViewController : UITableViewController
 
-@property(weak, nonatomic)NSDictionary *current_category;
-@property(weak, nonatomic)NSArray *products;
-@property(weak, nonatomic)NSArray *orders;
-@property(weak, nonatomic)NSArray *filters;
+@property(strong, nonatomic)NSDictionary *current_category;
+@property(strong, nonatomic)NSArray *products;
+@property(strong, nonatomic)NSArray *orders;
+@property(strong, nonatomic)NSArray *filters;
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 - (IBAction)changeSortDirection:(id)sender;
 

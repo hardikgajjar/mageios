@@ -49,15 +49,33 @@
     
     if ([[notification name] isEqualToString:@"categoryDataLoadedNotification"]) {
         
-        self.orders = [category valueForKeyPath:@"orders"];
-        self.filters = [category valueForKeyPath:@"filters"];
-        self.products = [category valueForKeyPath:@"products"];
+        if ([[category valueForKeyPath:@"orders"] isKindOfClass:[NSDictionary class]]) {
+            self.orders = [NSArray arrayWithObjects:[category valueForKeyPath:@"orders"], nil];
+        } else {
+            self.orders = [category valueForKeyPath:@"orders"];
+        }
         
+        if ([[category valueForKeyPath:@"filters"] isKindOfClass:[NSDictionary class]]) {
+            self.filters = [NSArray arrayWithObjects:[category valueForKeyPath:@"filters"], nil];
+        } else {
+            self.filters = [category valueForKeyPath:@"filters"];
+        }
+        
+        if ([[category valueForKeyPath:@"products"] isKindOfClass:[NSDictionary class]]) {
+            self.products = [NSArray arrayWithObjects:[category valueForKeyPath:@"products"], nil];
+        } else {
+            self.products = [category valueForKeyPath:@"products"];
+        }
+
         [self updateProducts];
         
     } else if ([[notification name] isEqualToString:@"moreProductsLoadedNotification"]) {
         
-        self.products = [category valueForKeyPath:@"products"];
+        if ([[category valueForKeyPath:@"products"] isKindOfClass:[NSDictionary class]]) {
+            self.products = [NSArray arrayWithObjects:[category valueForKeyPath:@"products"], nil];
+        } else {
+            self.products = [category valueForKeyPath:@"products"];
+        }
         
         [self updateProducts];
     }

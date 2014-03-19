@@ -89,6 +89,12 @@ static Quote *instance =nil;
     NSURLSessionDataTask *add_product_to_cart = [session dataTaskWithRequest:request
                                                         completionHandler:
                                               ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                  
+                                                  // fire request complete event
+                                                  [[NSNotificationCenter defaultCenter]
+                                                   postNotificationName:@"requestCompletedNotification"
+                                                   object:self];
+                                                  
                                                   NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
 
                                                   if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {

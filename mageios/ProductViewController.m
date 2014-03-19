@@ -13,6 +13,8 @@
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 
+#import "SelectOptionsViewController.h"
+
 
 @interface ProductViewController ()
 
@@ -24,7 +26,7 @@
     Quote   *quote;
 }
 
-@synthesize current_product,loading,product_image,price,stock_status,short_desc,ratings,reviewCount,reviewText,qty;
+@synthesize current_product,loading,productOptions,product_image,price,stock_status,short_desc,ratings,reviewCount,reviewText,qty,selectOptions,addToCart;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -80,6 +82,13 @@
                                              selector:@selector(observer:)
                                                  name:@"productAddedToCartNotification"
                                                object:nil];
+
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
+    
 }
 
 - (void)viewDidLoad
@@ -185,6 +194,44 @@
         [borderLayer setBorderWidth:1.0];
         [borderLayer setBorderColor:[[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0] CGColor]];
         [self.product_image.layer addSublayer:borderLayer];
+        
+        // set product options
+        
+        if ([[product.data valueForKeyPath:@"product.options.option"] isKindOfClass:[NSDictionary class]]) {
+            self.productOptions = [NSArray arrayWithObjects:[product.data valueForKeyPath:@"product.options.option"], nil];
+        } else {
+            self.productOptions = [product.data valueForKeyPath:@"product.options.option"];
+        }
+        
+        if (self.productOptions != nil) {
+            // enable select options button
+            self.selectOptions.hidden = false;
+        }
+        
+        /*if (options != nil) {
+            
+            // enable select options button
+            self.selectOptions.hidden = false;
+            
+            int is_required = 0;
+            
+            if ([options isKindOfClass:[NSDictionary class]]) {
+                if ([[options valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                    is_required = 1;
+                }
+            } else {
+                for (NSArray *option in options) {
+                    if ([[option valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                        is_required = 1;
+                    }
+                }
+            }
+            
+            // disable add to cart button if any of the options is required
+            if (is_required) {
+                self.addToCart.enabled = false;
+            }
+        }*/
     }
 }
 
@@ -205,26 +252,66 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    /*if ([segue.identifier isEqualToString:@"loopbackSegue"]) {
-        CategoryViewController *nextController = segue.destinationViewController;
-        nextController.parent_category = sender;
-        //nextController.title = [sender valueForKeyPath:@"name"];
-    }*/
+    if ([segue.identifier isEqualToString:@"selectOptionsSegue"]) {
+        SelectOptionsViewController *selectOptionController = segue.destinationViewController;
+        selectOptionController.delegate = self;
+        selectOptionController.options = self.productOptions;
+    }
 }
 
 
 - (IBAction)addToCart:(id)sender {
     
-    quote = [Quote getInstance];
+    BOOL is_valid = true;
     
-    if (quote) {
+    if (self.productOptions != nil) {
         
-        [self.loading show:YES];
+        // check if all required options are having values?
+        for (NSArray *option in self.productOptions) {
+            
+            if ([[option valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                
+                if ([option valueForKey:@"value"] == nil || [[option valueForKey:@"value"] isEqualToString:@""]) {
+                    is_valid = false;
+                    break;
+                }
+            }
+        }
         
-        NSDictionary *post_data = [[NSDictionary alloc] initWithObjectsAndKeys:[self.current_product valueForKey:@"entity_id"], @"product", self.qty.text, @"qty", nil];
-        [quote addToCart:post_data];
+    }
+    
+    if (is_valid) {
+        
+        quote = [Quote getInstance];
+        
+        if (quote) {
+            
+            [self.loading show:YES];
+            
+            // prepare post data
+            NSMutableDictionary *post_data = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self.current_product valueForKey:@"entity_id"], @"product", self.qty.text, @"qty", nil];
+            for (NSArray *option in self.productOptions) {
+                [post_data setValue:[option valueForKey:@"value"] forKey:[option valueForKey:@"_code"]];
+            }
+            
+            [quote addToCart:post_data];
+            
+        }
+        
+    } else {
+        // show alert
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"An Error Occured"
+                              message:@"Please specify the product required option(s)."
+                              delegate:nil
+                              cancelButtonTitle:@"Dismiss"
+                              otherButtonTitles:nil];
+        
+        [alert show];
+
     }
 }
+
 
 #pragma mark - alert view methods
 
@@ -234,6 +321,21 @@
         // go to cart pages
         [self performSegueWithIdentifier:@"cartSegue" sender:self];
     }
+}
+
+#pragma mark - table view methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.qty resignFirstResponder];
+}
+
+
+#pragma mark - select options methods
+
+- (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options
+{
+    self.productOptions = options;
 }
 
 @end
