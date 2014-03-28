@@ -10,6 +10,8 @@
 
 @interface Core : NSObject
 
-- (NSData*)encodeDictionary:(NSDictionary*)dictionary;
++ (NSData*)encodeDictionary:(NSDictionary*)dictionary;
++ (NSArray *)indexLettersForStrings:(NSArray *)strings;
++ (NSDictionary *)objectsByCharacters:(NSArray *)objects;
 
 @end

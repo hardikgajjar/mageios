@@ -111,7 +111,11 @@
 {
     // fire segue for current category (if available, from home tab)
     if (self.current_category != nil) {
-        [self performSegueWithIdentifier:@"loopbackSegue" sender:self.current_category];
+        if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"categories"]) {
+            [self performSegueWithIdentifier:@"loopbackSegue" sender:self.current_category];
+        } else if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"products"]) {
+            [self performSegueWithIdentifier:@"productsListSegue" sender:self.current_category];
+        }
         self.current_category = nil;
     }
 }

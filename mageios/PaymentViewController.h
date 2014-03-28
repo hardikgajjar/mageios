@@ -1,17 +1,17 @@
 //
-//  BillingViewController.h
+//  PaymentViewController.h
 //  mageios
 //
-//  Created by KTPL - Mobile Development on 12/03/14.
+//  Created by KTPL - Mobile Development on 28/03/14.
 //  Copyright (c) 2014 KTPL - Mobile Development. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-@interface BillingViewController : UITableViewController
+@interface PaymentViewController : UITableViewController
 
-@property(strong, nonatomic)NSDictionary *data;
+
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 
 @end

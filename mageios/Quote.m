@@ -9,6 +9,7 @@
 #import "Quote.h"
 #import "Service.h"
 #import "XMLDictionary.h"
+#import "Core.h"
 
 @implementation Quote
 
@@ -58,6 +59,15 @@ static Quote *instance =nil;
                                                           postNotificationName:@"quoteDataLoadedNotification"
                                                           object:self];
                                                          
+                                                     } else if([[res valueForKey:@"_summary_qty"] isEqualToString:@"0"]) {
+                                                         
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Cart is empty." waitUntilDone:NO];
+                                                        
+                                                         // fire event
+                                                         [[NSNotificationCenter defaultCenter]
+                                                          postNotificationName:@"quoteDataLoadedNotification"
+                                                          object:self];
+                                                         
                                                      } else {
                                                          NSLog(@"%@", res);
                                                          [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
@@ -83,7 +93,7 @@ static Quote *instance =nil;
     // prepare request with post data
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[self encodeDictionary:data]];
+    [request setHTTPBody:[Core encodeDictionary:data]];
     
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *add_product_to_cart = [session dataTaskWithRequest:request
@@ -119,21 +129,9 @@ static Quote *instance =nil;
     [add_product_to_cart resume];
 }
 
-- (NSData*)encodeDictionary:(NSDictionary*)dictionary {
-    NSMutableArray *parts = [[NSMutableArray alloc] init];
-    for (NSString *key in dictionary) {
-        NSString *encodedValue = [[dictionary objectForKey:key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSString *encodedKey = [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSString *part = [NSString stringWithFormat: @"%@=%@", encodedKey, encodedValue];
-        [parts addObject:part];
-    }
-    NSString *encodedDictionary = [parts componentsJoinedByString:@"&"];
-    return [encodedDictionary dataUsingEncoding:NSUTF8StringEncoding];
-}
-
 - (void)showAlertWithErrorMessage:(NSString *)message
 {
-    if (message == nil) message = @"Unable to add product to cart.";
+    if (message == nil) message = @"Something went wrong.";
     
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"An Error Occured"

@@ -9,9 +9,12 @@
 #import "CartViewController.h"
 #import "Service.h"
 #import "Quote.h"
+#import "Customer.h"
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 #import "Core.h"
+
+#import "BillingViewController.h"
 
 
 @interface CartViewController ()
@@ -21,6 +24,7 @@
 @implementation CartViewController {
     Service *service;
     Quote   *quote;
+    Customer *customer;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -71,6 +75,10 @@
     if (service.initialized) {
         [self updateCommonStyles];
         
+        // get customer
+        customer = [Customer getInstance];
+        
+        // get quote
         quote = [Quote getInstance];
         [quote getData];
     }
@@ -89,17 +97,27 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"billingSegue"]) {
+        BillingViewController *nextController = segue.destinationViewController;
+        nextController.data = sender;
+    }
 }
 
- */
+- (IBAction)returnFromLogin:(UIStoryboardSegue *)segue {
+    
+    customer.isLoggedIn = true;
+    
+    // show actionsheet
+    
+}
+
+
 
 #pragma mark - Table view data source
 
@@ -114,13 +132,11 @@
     // Return the number of rows in the section.
     switch (section) {
         case 0:
-            return 1;
-        case 1:
             if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
                 return 1;
             }
             return [[quote.data valueForKeyPath:@"products.item"] count];
-        case 2:
+        case 1:
             if ([[quote.data valueForKeyPath:@"crosssell.item"] isKindOfClass:[NSDictionary class]]) {
                 return 1;
             }
@@ -134,10 +150,8 @@
 {
     switch (section) {
         case 0:
-            return nil;
-        case 1:
             return @"Product                                                    Qty";
-        case 2:
+        case 1:
             return @"You may also like";
         default:
             return 0;
@@ -148,14 +162,6 @@
 {
     switch (indexPath.section) {
         case 0:
-        {
-            static NSString *CellIdentifier = @"checkoutButtonCell";
-            
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-            
-            return cell;
-        }
-        case 1:
         {
             static NSString *CellIdentifier = @"productCell";
             
@@ -207,7 +213,7 @@
             
             return cell;
         }
-        case 2:
+        case 1:
         {
             static NSString *CellIdentifier = @"crossellCell";
             
@@ -221,37 +227,66 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0)
-        return 50;
     return 110;
 }
 
 
 - (IBAction)showCheckoutOptions:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Log into Account", @"Create Account", @"Checkout as Guest", nil];
     
-    [actionSheet showInView:self.view];
+    if (customer.isLoggedIn) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Pay with PayPal", @"Standard Checkout", nil];
+        actionSheet.tag = 2;
+        [actionSheet showInView:self.view];
+    } else {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Log into Account", @"Create Account", @"Checkout as Guest", nil];
+        actionSheet.tag = 1;
+        [actionSheet showInView:self.view];
+    }
 }
 
 #pragma mark - Action sheet
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
-        case 0:
-            // TODO: open login screen
-            break;
-        
-        case 1:
-            // TODO: open register screen
+    switch (actionSheet.tag) {
+        case 2: // customer is logged in
+            
+            switch (buttonIndex) {
+                case 0:
+                    // TODO: handle checkout with paypal
+                    break;
+                    
+                case 1:
+                    // go to checkout
+                    [self checkoutAsGuest]; // TODO: check if this is correct call?
+                    break;
+                    
+                default:
+                    break;
+            }
+            
             break;
             
-        case 2:
-            // checkout as guest
-            [self checkoutAsGuest];
-            break;
+        default: // customer is not logged in
             
-        default:
+            switch (buttonIndex) {
+                case 0:
+                    // TODO: open login screen
+                    break;
+                    
+                case 1:
+                    // TODO: open register screen
+                    break;
+                    
+                case 2:
+                    // checkout as guest
+                    [self checkoutAsGuest];
+                    break;
+                    
+                default:
+                    break;
+            }
+
             break;
     }
 }
@@ -279,7 +314,7 @@
                                           [self.loading hide:YES];
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-
+                                          
                                           if ([[res valueForKey:@"__name"] isEqualToString:@"billing"]) {
                                               [self saveCheckoutMethod];
                                               
@@ -287,6 +322,13 @@
                                               // redirect customer to, billing or shipping or anything else?
                                               // and may be there's an error also
                                               [self getCheckoutLandingPage];
+                                          } else if ([[res valueForKey:@"__name"] isEqualToString:@"message"] &&
+                                                     [[res valueForKey:@"status"] isEqualToString:@"error"] &&
+                                                     [[res valueForKey:@"logged_in"] isEqualToString:@"0"]) {
+                                              
+                                              // show alert and on click go to login
+                                              [self performSelectorOnMainThread:@selector(showAlertWithMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                              
                                           }
                                           
                                       }];
@@ -307,8 +349,8 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     [request setHTTPMethod:@"POST"];
     NSDictionary *post_data = [[NSDictionary alloc] initWithObjectsAndKeys:@"guest", @"method", nil];
-    Core *core_helper = [[Core alloc] init];
-    [request setHTTPBody:[core_helper encodeDictionary:post_data]];
+
+    [request setHTTPBody:[Core encodeDictionary:post_data]];
     
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *save_checkout_method = [session dataTaskWithRequest:request
@@ -349,9 +391,9 @@
                                           [self.loading hide:YES];
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-
+                                          NSLog(@"%@", res);
                                           if ([[res valueForKey:@"__name"] isEqualToString:@"billing"]) {
-                                              [self performSelectorOnMainThread:@selector(redirectToBilling) withObject:nil waitUntilDone:NO];
+                                              [self performSelectorOnMainThread:@selector(redirectToBillingwithData:) withObject:res waitUntilDone:NO];
                                               return;
                                           }
                                           
@@ -360,9 +402,30 @@
     [checkout resume];
 }
 
-- (void)redirectToBilling
+- (void)redirectToBillingwithData:(NSDictionary *)data
 {
-    [self performSegueWithIdentifier:@"billingSegue" sender:self];
+    [self performSegueWithIdentifier:@"billingSegue" sender:data];
+}
+
+- (void)showAlertWithMessage:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"An Error Occured"
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    
+    [alert show];
+}
+
+#pragma mark - alert view methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) { // go to login
+        [self performSegueWithIdentifier:@"loginSegue" sender:self];
+    }
 }
 
 @end

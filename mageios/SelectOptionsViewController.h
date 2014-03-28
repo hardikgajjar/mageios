@@ -14,7 +14,7 @@
 - (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options;
 @end
 
-@interface SelectOptionsViewController : UITableViewController
+@interface SelectOptionsViewController : UITableViewController <UITextFieldDelegate>
 
 @property(strong, nonatomic)NSArray *options;
 @property (nonatomic, weak) id <SelectOptionsViewDelegate> delegate;

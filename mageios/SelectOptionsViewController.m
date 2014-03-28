@@ -93,6 +93,7 @@
             input_field.tag = i+1; // start with tag 1 since 0 is already allocated
             input_field.placeholder = [option valueForKey:@"_label"];
             input_field.text = [option valueForKey:@"value"];
+            input_field.delegate = self;
             
             [cell.contentView addSubview:input_field];
             
@@ -124,5 +125,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
 
 @end
