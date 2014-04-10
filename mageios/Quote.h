@@ -12,9 +12,11 @@
 
 @property(nonatomic,retain)NSDictionary *response;
 @property(nonatomic,retain)NSDictionary *data;
+@property(nonatomic,retain)NSDictionary *totals;
 
 + (Quote *)getInstance;
 - (void)getData;
+- (void)getTotals;
 - (void)addToCart:(NSDictionary *)data;
 
 @end

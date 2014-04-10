@@ -7,9 +7,12 @@
 //
 
 #import "PaymentViewController.h"
+#import "PaypalViewController.h"
+#import "OrderReviewViewController.h"
 #import "Service.h"
 #import "Customer.h"
 #import "Quote.h"
+#import "Checkout.h"
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 #import "Core.h"
@@ -20,31 +23,60 @@
 
 @implementation PaymentViewController {
     Service *service;
+    Quote *quote;
+    Checkout *checkout;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (void) observer:(NSNotification *) notification
 {
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
+    // perform ui updates from main thread so that they updates correctly
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
+        return;
     }
-    return self;
+    
+    [self.loading hide:YES];
+    
+    if ([[notification name] isEqualToString:@"paymentMethodSavedNotification"]) {
+        // goto order review
+        [self performSegueWithIdentifier:@"reviewSegue" sender:self];
+    }
+}
+
+- (void)addObservers
+{
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
+    // Add quote totals loaded observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"paymentMethodSavedNotification"
+                                               object:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    [self addObservers];
+    
     service = [Service getInstance];
     
     if (service.initialized) {
         
+        // get cart totals
+        quote = [Quote getInstance];
+        
         [self updateCommonStyles];
         
-        [self getPaymentMethods];
+        //[self getPaymentMethods];
         
     }
 }
+
 
 - (void)getPaymentMethods
 {
@@ -93,76 +125,94 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return 1;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"fieldCell" forIndexPath:indexPath];
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    // open paypal controller
+    [self performSegueWithIdentifier:@"paypalSegue" sender:self];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)savePaymentMethod:(NSString *)method withAuthId:(NSString *)authId
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+    checkout = [Checkout getInstance];
+    
+    if (checkout) {
+        
+        [self.loading show:YES];
+        
+        // prepare post data
+        NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
+        [post_data setValue:method forKey:@"payment[method]"];
+        [post_data setValue:authId forKey:@"payment[pay_id]"];
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
+        [checkout savePayment:post_data];
+    }
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"paypalSegue"]) {
+        PaypalViewController *nextController = segue.destinationViewController;
+        nextController.title = @"PayPal";
+        nextController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"reviewSegue"]) {
+        OrderReviewViewController *nextController = segue.destinationViewController;
+        nextController.title = @"Order Review";
+    }
 }
-*/
+
+
+#pragma mark - paypal view delegate methods
+
+- (void)paymentComplete:(PaypalViewController *)controller withResponse:(PayPalPayment *)response
+{
+    //NSLog(@"%@", [response description]);
+    
+    // confirmation has id, intent,state
+    if([[response.confirmation valueForKeyPath:@"response.state"] isEqualToString:@"approved"]) {
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setValue:[response.confirmation valueForKeyPath:@"response.id"] forKey:@"pay_id"];
+        [defaults synchronize];
+        
+        // save payment method
+        #warning change once server side paypal mobile is ready
+        [self savePaymentMethod:@"paypalmobile" withAuthId:[response.confirmation valueForKeyPath:@"response.id"]];
+        
+    } else {
+        // show error
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"An Error Occured"
+                              message:@"Payment can't be authorized. Please try again later."
+                              delegate:nil
+                              cancelButtonTitle:@"Dismiss"
+                              otherButtonTitles:nil];
+        
+        [alert show];
+    }
+    
+}
 
 @end

@@ -10,6 +10,7 @@
 #import "Service.h"
 #import "Customer.h"
 #import "Quote.h"
+#import "Checkout.h"
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 #import "Core.h"
@@ -22,8 +23,10 @@
 @implementation BillingViewController {
     Service *service;
     Customer *customer;
+    Checkout *checkout;
     NSArray *fields;
     NSMutableArray *cells;
+    NSDictionary *selected_address;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -35,9 +38,41 @@
     return self;
 }
 
+- (void) observer:(NSNotification *) notification
+{
+    // perform ui updates from main thread so that they updates correctly
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
+        return;
+    }
+    
+    [self.loading hide:YES];
+    
+    if ([[notification name] isEqualToString:@"billingAddressSavedNotification"]) {
+        // goto payment (assume that we only have virtual products so no need of shipping address)
+        [self performSegueWithIdentifier:@"paymentFromBillingSegue" sender:self];
+    }
+}
+
+- (void)addObservers
+{
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
+    // Add billing address saved observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"billingAddressSavedNotification"
+                                               object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self addObservers];
     
     service = [Service getInstance];
     
@@ -157,34 +192,47 @@
             switch (indexPath.section) {
                 case 0: // saved address
                 {
+                    if ([[self.data valueForKey:@"item"] isKindOfClass:[NSDictionary class]]) { // if only one address is there
+                        selected_address = [self.data valueForKey:@"item"];
+                    } else { // there are multiple addresses, we need default address
+                        
+                        for (NSDictionary *address in [self.data valueForKey:@"item"]) {
+                            if ([[address valueForKey:@"_selected"] isEqualToString:@"1"]) {
+                                selected_address = address;
+                                break;
+                            }
+                        }
+                        
+                    }
+                    
                     static NSString *CellIdentifier = @"addressCell";
                     
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
                     
                     UILabel *name = (UILabel *)[cell viewWithTag:10];
                     name.text = [NSString stringWithFormat:@"%@ %@",
-                                 [self.data valueForKeyPath:@"item.firstname"],
-                                 [self.data valueForKeyPath:@"item.lastname"]
+                                 [selected_address valueForKeyPath:@"firstname"],
+                                 [selected_address valueForKeyPath:@"lastname"]
                                  ];
                     
                     UILabel *company = (UILabel *)[cell viewWithTag:20];
-                    company.text = [self.data valueForKeyPath:@"item.company"];
+                    company.text = [selected_address valueForKeyPath:@"company"];
                     
                     UILabel *street = (UILabel *)[cell viewWithTag:30];
                     street.text = [NSString stringWithFormat:@"%@ %@",
-                                   [self.data valueForKeyPath:@"item.street1"],
-                                   [self.data valueForKeyPath:@"item.street2"]
+                                   [selected_address valueForKeyPath:@"street1"],
+                                   [selected_address valueForKeyPath:@"street2"]
                                    ];
                     
                     UILabel *cityStateZip = (UILabel *)[cell viewWithTag:40];
                     cityStateZip.text = [NSString stringWithFormat:@"%@ %@ %@",
-                                   [self.data valueForKeyPath:@"item.city"],
-                                   [self.data valueForKeyPath:@"item.region"],
-                                   [self.data valueForKeyPath:@"item.postcode"]
+                                   [selected_address valueForKeyPath:@"city"],
+                                   [selected_address valueForKeyPath:@"region"],
+                                   [selected_address valueForKeyPath:@"postcode"]
                                    ];
                     
                     UILabel *country = (UILabel *)[cell viewWithTag:50];
-                    country.text = [self.data valueForKeyPath:@"item.country"];
+                    country.text = [selected_address valueForKeyPath:@"country"];
                     
                     return cell;
                     break;
@@ -252,8 +300,7 @@
             switch (indexPath.section) {
                 case 0: // saved address
                 {
-                    // go to payment step
-                    
+                    [self saveDefaultAddress:self];
                     break;
                 }
                 case 1: // add new address
@@ -345,4 +392,21 @@
 }
 */
 
+- (IBAction)saveDefaultAddress:(id)sender {
+    // save default billing address in checkout
+    customer = [Customer getInstance];
+    
+    if (customer) {
+        // show loading
+        self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.loading.labelText = @"Loading";
+        
+        // prepare post data
+        NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
+        [post_data setValue:[selected_address valueForKey:@"entity_id"] forKey:@"billing_address_id"];
+        [post_data setValue:@"0" forKey:@"billing[use_for_shipping]"];
+        
+        [customer saveBillingAddress:post_data];
+    }
+}
 @end

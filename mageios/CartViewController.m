@@ -113,7 +113,7 @@
     
     customer.isLoggedIn = true;
     
-    // show actionsheet
+    [self checkout];
     
 }
 
@@ -234,9 +234,7 @@
 - (IBAction)showCheckoutOptions:(id)sender {
     
     if (customer.isLoggedIn) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Pay with PayPal", @"Standard Checkout", nil];
-        actionSheet.tag = 2;
-        [actionSheet showInView:self.view];
+        [self checkout];
     } else {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Log into Account", @"Create Account", @"Checkout as Guest", nil];
         actionSheet.tag = 1;
@@ -248,50 +246,26 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (actionSheet.tag) {
-        case 2: // customer is logged in
-            
-            switch (buttonIndex) {
-                case 0:
-                    // TODO: handle checkout with paypal
-                    break;
-                    
-                case 1:
-                    // go to checkout
-                    [self checkoutAsGuest]; // TODO: check if this is correct call?
-                    break;
-                    
-                default:
-                    break;
-            }
-            
+    switch (buttonIndex) {
+        case 0:
+            // TODO: open login screen
             break;
             
-        default: // customer is not logged in
+        case 1:
+            // TODO: open register screen
+            break;
             
-            switch (buttonIndex) {
-                case 0:
-                    // TODO: open login screen
-                    break;
-                    
-                case 1:
-                    // TODO: open register screen
-                    break;
-                    
-                case 2:
-                    // checkout as guest
-                    [self checkoutAsGuest];
-                    break;
-                    
-                default:
-                    break;
-            }
-
+        case 2:
+            // checkout as guest
+            [self checkout];
+            break;
+            
+        default:
             break;
     }
 }
 
-- (void)checkoutAsGuest
+- (void)checkout
 {
     [self.loading show:YES];
     

@@ -78,6 +78,55 @@ static Quote *instance =nil;
     [get_cart_data resume];
 }
 
+- (void)getTotals
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart/info"];
+    
+    // get cart data
+    
+    NSString *cart_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:cart_url];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *get_cart_data = [session dataTaskWithRequest:request
+                                                     completionHandler:
+                                           ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                               NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                               
+                                               if ([res valueForKey:@"totals"] != nil) {
+                                                   
+                                                   // store cart data
+                                                   self.totals = res;
+                                                   
+                                                   // fire event
+                                                   [[NSNotificationCenter defaultCenter]
+                                                    postNotificationName:@"quoteTotalsLoadedNotification"
+                                                    object:self];
+                                                   
+                                               } else if([[res valueForKey:@"summary_qty"] isEqualToString:@"0"]) {
+                                                   
+                                                   [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Cart is empty." waitUntilDone:NO];
+                                                   
+                                                   // fire event
+                                                   [[NSNotificationCenter defaultCenter]
+                                                    postNotificationName:@"quoteDataLoadedNotification"
+                                                    object:self];
+                                                   
+                                               } else {
+                                                   NSLog(@"%@", res);
+                                                   [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                               }
+                                               
+                                           }];
+    
+    [get_cart_data resume];
+}
+
 - (void)addToCart:(NSDictionary *)data
 {
     Service *service = [Service getInstance];

@@ -14,4 +14,6 @@
 @property(strong, nonatomic)NSDictionary *data;
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 
+- (IBAction)saveDefaultAddress:(id)sender;
+
 @end
