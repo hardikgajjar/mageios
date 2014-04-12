@@ -12,10 +12,12 @@
 #import "UIColor+CreateMethods.h"
 #import "Service.h"
 #import "XCategory.h"
+#import "Utility.h"
 
 @interface CategoryViewController () {
     Service *service;
     XCategory *category;
+    Utility *utility;
 }
 
 @end
@@ -57,6 +59,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    utility = [[Utility alloc] init];
+    [utility addLeftMenu:self];
     
     // Do any additional setup after loading the view.
     

@@ -8,13 +8,23 @@
 
 #import "AppDelegate.h"
 #import "Service.h"
+#import "PPRevealSideViewController.h"
 
 @implementation AppDelegate
+
+@synthesize revealSideViewController = _revealSideViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // initialize remote service
     Service *service = [Service getInstance];
+    
+    // setup menu
+    _revealSideViewController = [[PPRevealSideViewController alloc] initWithRootViewController:self.window.rootViewController];
+    [_revealSideViewController resetOption:PPRevealSideOptionsiOS7StatusBarFading];
+    [_revealSideViewController setOption:PPRevealSideOptionsiOS7StatusBarMoving];
+    self.window.rootViewController = _revealSideViewController;
+    
     
     return YES;
 }

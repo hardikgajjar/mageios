@@ -13,6 +13,8 @@
 @property(nonatomic,retain)NSDictionary *response;
 @property(nonatomic,retain)NSDictionary *data;
 @property(nonatomic,retain)NSDictionary *totals;
+@property(assign)BOOL is_empty;
+
 
 + (Quote *)getInstance;
 - (void)getData;

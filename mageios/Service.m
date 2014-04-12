@@ -7,6 +7,7 @@
 //
 
 #import "Service.h"
+#import "Customer.h"
 #import "XMLDictionary.h"
 
 @implementation Service
@@ -57,6 +58,9 @@ static Service *instance =nil;
                                               [[NSNotificationCenter defaultCenter]
                                                postNotificationName:@"serviceNotification"
                                                object:self];
+                                              
+                                              // init customer to find if is logged In.
+                                              Customer *customer = [Customer getInstance];
                                           } else {
                                               [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];
                                           }

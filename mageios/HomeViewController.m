@@ -12,11 +12,12 @@
 #import "UIColor+CreateMethods.h"
 #import "Service.h"
 #import "Home.h"
-
+#import "Utility.h"
 
 @interface HomeViewController () {
     Service *service;
     Home *home;
+    Utility *utility;
 }
 @end
 
@@ -60,6 +61,9 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    utility = [[Utility alloc] init];
+    [utility addLeftMenu:self];
+    
     // show loading
     self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.loading.labelText = @"Loading";
@@ -88,11 +92,11 @@
     }
     
     // set title view
-    UIView *titleview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    //UIView *titleview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
     UIImage *nav_icon = [UIImage imageWithData:
                        [NSData dataWithContentsOfURL:
                         [NSURL URLWithString:[service.config_data valueForKeyPath:@"navigationBar.icon"]]]];
-    UIImageView *nav_icon_view = [[UIImageView alloc] initWithFrame:CGRectMake(110, 0, 35, 35)];
+    UIImageView *nav_icon_view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
     [nav_icon_view setImage:nav_icon];
     
     UILabel *nav_label = [[UILabel alloc] initWithFrame:CGRectMake(145, 0, 100, 30)];
@@ -100,9 +104,9 @@
     nav_label.backgroundColor=[UIColor clearColor];
     nav_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
     
-    [titleview addSubview:nav_icon_view];
-    [titleview addSubview:nav_label];
-    self.navigationItem.titleView = titleview;
+    //[titleview addSubview:nav_icon_view];
+    //[titleview addSubview:nav_label];
+    self.navigationItem.titleView = nav_icon_view;
 }
 
 - (void)updateCategories
@@ -195,6 +199,19 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+#pragma mark - SlideNavigationController Methods -
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+	return YES;
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayRightMenu
+{
+	return NO;
 }
 
 @end

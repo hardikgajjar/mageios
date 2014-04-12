@@ -13,7 +13,7 @@
 
 @implementation Quote
 
-@synthesize response;
+@synthesize response, is_empty;
 
 static Quote *instance =nil;
 
@@ -34,7 +34,7 @@ static Quote *instance =nil;
     Service *service = [Service getInstance];
     
     // initialize variables
-    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart"];
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart/shoppingCart"];
     
     // get cart data
     
@@ -53,13 +53,17 @@ static Quote *instance =nil;
                                                          
                                                          // store cart data
                                                          self.data = res;
+                                                         is_empty = false;
                                                          
                                                          // fire event
                                                          [[NSNotificationCenter defaultCenter]
                                                           postNotificationName:@"quoteDataLoadedNotification"
                                                           object:self];
                                                          
-                                                     } else if([[res valueForKey:@"_summary_qty"] isEqualToString:@"0"]) {
+                                                     } else if([res valueForKey:@"summary"] != nil) {
+                                                         
+                                                         is_empty = true;
+                                                         self.data = nil;
                                                          
                                                          [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Cart is empty." waitUntilDone:NO];
                                                         
@@ -101,6 +105,7 @@ static Quote *instance =nil;
                                                if ([res valueForKey:@"totals"] != nil) {
                                                    
                                                    // store cart data
+                                                   is_empty = false;
                                                    self.totals = res;
                                                    
                                                    // fire event
@@ -109,7 +114,7 @@ static Quote *instance =nil;
                                                     object:self];
                                                    
                                                } else if([[res valueForKey:@"summary_qty"] isEqualToString:@"0"]) {
-                                                   
+                                                   is_empty = true;
                                                    [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Cart is empty." waitUntilDone:NO];
                                                    
                                                    // fire event

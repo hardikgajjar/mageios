@@ -42,6 +42,7 @@
     if ([[notification name] isEqualToString:@"loggedInNotification"]) {
         // go back to previous view
         [self performSegueWithIdentifier:@"returnFromLoginSegue" sender:self];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

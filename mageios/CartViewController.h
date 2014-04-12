@@ -12,6 +12,7 @@
 @interface CartViewController : UITableViewController <UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *checkout_btn;
 
 - (IBAction)showCheckoutOptions:(id)sender;
 @end

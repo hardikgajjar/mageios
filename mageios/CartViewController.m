@@ -13,6 +13,7 @@
 #import "XMLDictionary.h"
 #import "UIColor+CreateMethods.h"
 #import "Core.h"
+#import "Utility.h"
 
 #import "BillingViewController.h"
 
@@ -25,7 +26,10 @@
     Service *service;
     Quote   *quote;
     Customer *customer;
+    Utility *utility;
 }
+
+@synthesize checkout_btn;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -47,6 +51,13 @@
     [self.loading hide:YES];
     
     if ([[notification name] isEqualToString:@"quoteDataLoadedNotification"]) {
+        
+        if (quote.is_empty) {
+            checkout_btn.enabled = false;
+        } else {
+            checkout_btn.enabled = true;
+        }
+
         [self.tableView reloadData];
     }
 }
@@ -64,6 +75,15 @@
 {
     [super viewDidLoad];
 
+    utility = [[Utility alloc] init];
+    [utility addLeftMenu:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // writing here to load cart all the times this view is opened
     // show loading
     self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.loading.labelText = @"Loading";
@@ -137,10 +157,15 @@
             }
             return [[quote.data valueForKeyPath:@"products.item"] count];
         case 1:
-            if ([[quote.data valueForKeyPath:@"crosssell.item"] isKindOfClass:[NSDictionary class]]) {
+            if ([quote.data valueForKeyPath:@"totals.total"])
                 return 1;
-            }
-            return [[quote.data valueForKeyPath:@"crosssell.item"] count];
+            else
+                return 0;
+//        case 1:
+//            if ([[quote.data valueForKeyPath:@"crosssell.item"] isKindOfClass:[NSDictionary class]]) {
+//                return 1;
+//            }
+//            return [[quote.data valueForKeyPath:@"crosssell.item"] count];
         default:
             return 0;
     }
@@ -151,8 +176,8 @@
     switch (section) {
         case 0:
             return @"Product                                                    Qty";
-        case 1:
-            return @"You may also like";
+//        case 1:
+//            return @"You may also like";
         default:
             return 0;
     }
@@ -215,9 +240,28 @@
         }
         case 1:
         {
-            static NSString *CellIdentifier = @"crossellCell";
+            static NSString *CellIdentifier = @"totalsCell";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+            int i = 1;
+
+            for (NSDictionary *total in [quote.data valueForKeyPath:@"totals.total"]) {
+
+                UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20*i, 180, 20)];
+                title.textAlignment = NSTextAlignmentRight;
+                title.font=[title.font fontWithSize:13];
+                title.text = [total valueForKeyPath:@"item._label"];
+                
+                UILabel *value = [[UILabel alloc] initWithFrame:CGRectMake(220, 20*i, 80, 20)];
+                value.textAlignment = NSTextAlignmentRight;
+                value.font=[value.font fontWithSize:13];
+                value.text = [total valueForKeyPath:@"item._formatted_value"];
+                
+                [cell.contentView addSubview:title];
+                [cell.contentView addSubview:value];
+                
+                i++;
+            }
             
             return cell;
         }
@@ -248,11 +292,13 @@
 {
     switch (buttonIndex) {
         case 0:
-            // TODO: open login screen
+            // go to login
+            [self performSegueWithIdentifier:@"loginSegue" sender:self];
             break;
             
         case 1:
-            // TODO: open register screen
+            // open register screen
+            [self performSegueWithIdentifier:@"createAccountFromCheckoutSegue" sender:self];
             break;
             
         case 2:

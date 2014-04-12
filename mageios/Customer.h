@@ -15,6 +15,7 @@
 
 + (Customer *)getInstance;
 - (void)login:(NSDictionary *)data;
+- (void)logout;
 - (void)saveBillingAddress:(NSDictionary *)data;
 
 @end

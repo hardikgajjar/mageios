@@ -97,6 +97,8 @@ static Customer *instance =nil;
                                                      NSLog(@"%@", res);
                                                      if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
                                                          
+                                                         self.isLoggedIn = true;
+                                                         
                                                          // fire event
                                                          [[NSNotificationCenter defaultCenter]
                                                           postNotificationName:@"loggedInNotification"
@@ -112,6 +114,54 @@ static Customer *instance =nil;
                                                  }];
     
     [login resume];
+}
+
+- (void)logout
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/customer/logout"];
+    
+    // logout
+    
+    NSString *logout_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:logout_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *logout = [session dataTaskWithRequest:request
+                                             completionHandler:
+                                   ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                       
+                                       // fire request complete event
+                                       [[NSNotificationCenter defaultCenter]
+                                        postNotificationName:@"requestCompletedNotification"
+                                        object:self];
+                                       
+                                       NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                       
+                                       if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
+                                           self.isLoggedIn = false;
+                                           
+                                           // fire event
+                                           [[NSNotificationCenter defaultCenter]
+                                            postNotificationName:@"loggedOutNotification"
+                                            object:self];
+                                           
+                                       } else if([[res valueForKey:@"status"] isEqualToString:@"error"]) {
+                                           [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                       } else {
+                                           NSLog(@"%@", res);
+                                           [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                       }
+                                       
+                                   }];
+    
+    [logout resume];
 }
 
 - (void)saveBillingAddress:(NSDictionary *)data
