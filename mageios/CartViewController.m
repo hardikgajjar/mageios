@@ -27,6 +27,8 @@
     Quote   *quote;
     Customer *customer;
     Utility *utility;
+    NSInteger last_deleted_item_id;
+    NSString *last_qty_value;
 }
 
 @synthesize checkout_btn;
@@ -48,35 +50,70 @@
         return;
     }
     
-    [self.loading hide:YES];
+    [self.loading hide:NO];
     
     if ([[notification name] isEqualToString:@"quoteDataLoadedNotification"]) {
-        
-        if (quote.is_empty) {
-            checkout_btn.enabled = false;
+        [self refreshCart];
+    } else if ([[notification name] isEqualToString:@"productRemovedFromCartNotification"]) {
+        if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
+            quote.data = nil;
+            quote.is_empty = true;
         } else {
-            checkout_btn.enabled = true;
+            [[quote.data valueForKeyPath:@"products.item"] removeObjectAtIndex:last_deleted_item_id];
         }
-
-        [self.tableView reloadData];
+        [self refreshCart];
+    } else if ([[notification name] isEqualToString:@"productUpdatedInCartNotification"]) {
+        //reload data
+        [self.loading show:YES];
+        [quote getData];
     }
+}
+
+- (void)refreshCart
+{
+    if (quote.is_empty) {
+        checkout_btn.enabled = false;
+    } else {
+        checkout_btn.enabled = true;
+    }
+    [self.tableView reloadData];
 }
 
 - (void)addObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
     // Add quote load observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observer:)
                                                  name:@"quoteDataLoadedNotification"
                                                object:nil];
+    
+    // Add item deleted from cart observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"productRemovedFromCartNotification"
+                                               object:nil];
+
+    // Add item updated from cart observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"productUpdatedInCartNotification"
+                                               object:nil];
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    utility = [[Utility alloc] init];
-    [utility addLeftMenu:self];
+    
+    // add left menu
+    //utility = [[Utility alloc] init];
+    //[utility addLeftMenu:self];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,7 +122,7 @@
     
     // writing here to load cart all the times this view is opened
     // show loading
-    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
     self.loading.labelText = @"Loading";
     
     [self addObservers];
@@ -183,6 +220,15 @@
     }
 }
 
+- (void)logTags:(UIView *)view indent:(NSInteger)indent {
+    
+    NSLog(@"%*sview is a %@ with tag = %d", indent, "", view.class, view.tag);
+    
+    for (UIView *subview in [view subviews]) {
+        [self logTags:subview indent:indent+4];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -221,19 +267,37 @@
             name.text = [product valueForKey:@"name"];
             
             // set unit price
-            UILabel *unit_price = (UILabel *)[cell viewWithTag:30];
-            unit_price.backgroundColor=[UIColor clearColor];
-            unit_price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
-            unit_price.text = [product valueForKeyPath:@"formated_price._regular"];
+            int y = 37, i=0;
+            for (NSDictionary *item in [product valueForKeyPath:@"price_list.prices"]) {
+                
+                UILabel *label = (UILabel *)[cell viewWithTag:70+i];
+                if (label == nil)
+                label = [[UILabel alloc] initWithFrame:CGRectMake(88, y, 65, 21)];
+                label.tag = 70+i;
+                label.backgroundColor=[UIColor clearColor];
+                [label setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
+                label.text = [item valueForKeyPath:@"price._label"];
+                
+                UILabel *price = (UILabel *)[cell viewWithTag:150+i];
+                if (price == nil)
+                price = [[UILabel alloc] initWithFrame:CGRectMake(155, y, 80, 21)];
+                price.tag = 150+i;
+                price.backgroundColor=[UIColor clearColor];
+                [price setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
+                price.text = [item valueForKeyPath:@"price._formatted_value"];
+                price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+                
+                [cell.contentView addSubview:label];
+                [cell.contentView addSubview:price];
+                
+                y += 15;
+                i++;
+            }
             
-            // set subtotal 
-            UILabel *subtotal = (UILabel *)[cell viewWithTag:40];
-            subtotal.backgroundColor=[UIColor clearColor];
-            subtotal.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
-            subtotal.text = [product valueForKeyPath:@"formated_subtotal._regular"];
             
             // set qty
-            UITextView *qty = (UITextView *)[cell viewWithTag:50];
+            //UITextView *qty = (UITextView *)[cell viewWithTag:50];
+            UILabel *qty = (UILabel *)[cell viewWithTag:60];
             qty.text = [product valueForKey:@"qty"];
             
             return cell;
@@ -243,24 +307,55 @@
             static NSString *CellIdentifier = @"totalsCell";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+            cell.editing = false;
+            
             int i = 1;
-
-            for (NSDictionary *total in [quote.data valueForKeyPath:@"totals.total"]) {
-
-                UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20*i, 180, 20)];
+            
+            if ([[quote.data valueForKeyPath:@"totals.total"] isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *total = [quote.data valueForKeyPath:@"totals.total"];
+                
+                UILabel *title = (UILabel *)[cell viewWithTag:10];
+                if (title == nil)
+                title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20*i, 180, 20)];
+                title.tag = 10;
                 title.textAlignment = NSTextAlignmentRight;
                 title.font=[title.font fontWithSize:13];
                 title.text = [total valueForKeyPath:@"item._label"];
                 
-                UILabel *value = [[UILabel alloc] initWithFrame:CGRectMake(220, 20*i, 80, 20)];
+                UILabel *value = (UILabel *)[cell viewWithTag:20];
+                if (value == nil)
+                value = [[UILabel alloc] initWithFrame:CGRectMake(220, 20*i, 80, 20)];
+                value.tag = 20;
                 value.textAlignment = NSTextAlignmentRight;
                 value.font=[value.font fontWithSize:13];
                 value.text = [total valueForKeyPath:@"item._formatted_value"];
                 
                 [cell.contentView addSubview:title];
                 [cell.contentView addSubview:value];
-                
-                i++;
+            } else {
+                for (NSDictionary *total in [quote.data valueForKeyPath:@"totals.total"]) {
+                    
+                    UILabel *title = (UILabel *)[cell viewWithTag:10+i];
+                    if (title == nil)
+                    title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20*i, 180, 20)];
+                    title.tag = 10+i;
+                    title.textAlignment = NSTextAlignmentRight;
+                    title.font=[title.font fontWithSize:13];
+                    title.text = [total valueForKeyPath:@"item._label"];
+                    
+                    UILabel *value = (UILabel *)[cell viewWithTag:50+i];
+                    if (value == nil)
+                    value = [[UILabel alloc] initWithFrame:CGRectMake(220, 20*i, 80, 20)];
+                    value.tag = 50+i;
+                    value.textAlignment = NSTextAlignmentRight;
+                    value.font=[value.font fontWithSize:13];
+                    value.text = [total valueForKeyPath:@"item._formatted_value"];
+                    
+                    [cell.contentView addSubview:title];
+                    [cell.contentView addSubview:value];
+                    
+                    i++;
+                }
             }
             
             return cell;
@@ -274,6 +369,85 @@
     return 110;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return true;
+    }
+    return false;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // If row is deleted, remove it from the list.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        self.edit_btn.title = @"Edit";
+        [self.loading show:YES];
+        
+        NSDictionary *item;
+        if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
+            item = [quote.data valueForKeyPath:@"products.item"];
+        } else {
+            item = [[quote.data valueForKeyPath:@"products.item"] objectAtIndex:indexPath.row];
+        }
+        last_deleted_item_id = indexPath.row;
+        
+        // prepare post data
+        NSMutableDictionary *post_data = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[item valueForKey:@"item_id"], @"item_id", nil];
+        
+        [quote removeItem:post_data];
+    }
+}
+
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+    [super setEditing:editing animated:animated];
+
+    if (editing == false) {
+        for (UITableViewCell *cell in [self.tableView visibleCells]) {
+            NSIndexPath *path = [self.tableView indexPathForCell:cell];
+            if (path.section == 0) {
+                // hide text box for qty
+                UITextView *qty_field = (UITextView *)[cell viewWithTag:50];
+                [qty_field resignFirstResponder];
+                qty_field.hidden = true;
+                UILabel *qty = (UILabel *)[cell viewWithTag:60];
+                qty.hidden = false;
+                qty.text = qty_field.text;
+            }
+        }
+    } else {
+        self.edit_btn.title = @"Done";
+
+        for (UITableViewCell *cell in [self.tableView visibleCells]) {
+            NSIndexPath *path = [self.tableView indexPathForCell:cell];
+            if (path.section == 0) {
+                // show text box for qty
+                UILabel *qty = (UILabel *)[cell viewWithTag:60];
+                qty.hidden = true;
+                UITextView *qty_field = (UITextView *)[cell viewWithTag:50];
+                qty_field.hidden = false;
+                qty_field.text = qty.text;
+            }
+        }
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.section == 0) {
+        self.edit_btn.title = @"Edit";
+        // hide text box for qty
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        UITextView *qty_field = (UITextView *)[cell viewWithTag:50];
+        [qty_field resignFirstResponder];
+        qty_field.hidden = true;
+        UILabel *qty = (UILabel *)[cell viewWithTag:60];
+        qty.hidden = false;
+        qty.text = qty_field.text;
+    }
+}
+
 
 - (IBAction)showCheckoutOptions:(id)sender {
     
@@ -284,6 +458,18 @@
         actionSheet.tag = 1;
         [actionSheet showInView:self.view];
     }
+}
+
+- (IBAction)editCart:(id)sender {
+    
+    if ([self.edit_btn.title isEqualToString:@"Edit"]) {
+        [self setEditing:YES animated:YES];
+        self.edit_btn.title = @"Done";
+    } else {
+        [self setEditing:NO animated:YES];
+        self.edit_btn.title = @"Edit";
+    }
+    
 }
 
 #pragma mark - Action sheet
@@ -446,6 +632,38 @@
     if (buttonIndex == 0) { // go to login
         [self performSegueWithIdentifier:@"loginSegue" sender:self];
     }
+}
+
+#pragma mark - textfield methods
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    last_qty_value = textField.text;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    // update qty if changed
+    if (textField.text != last_qty_value) {
+        [self.loading show:YES];
+        
+        CGRect location = [self.view convertRect:textField.frame toView:self.tableView];
+        NSIndexPath *path = [[self.tableView indexPathsForRowsInRect:location] objectAtIndex:0];
+
+        NSDictionary *item;
+        if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
+            item = [quote.data valueForKeyPath:@"products.item"];
+        } else {
+            item = [[quote.data valueForKeyPath:@"products.item"] objectAtIndex:path.row];
+        }
+        
+        // prepare post data
+        NSString *key = [NSString stringWithFormat:@"cart[%@][qty]", [item valueForKey:@"item_id"]];
+        NSMutableDictionary *post_data = [[NSMutableDictionary alloc] initWithObjectsAndKeys:textField.text, key, nil];
+        
+        [quote updateItem:post_data];
+    }
+    
+    last_qty_value = nil;
 }
 
 @end

@@ -183,6 +183,109 @@ static Quote *instance =nil;
     [add_product_to_cart resume];
 }
 
+
+- (void)removeItem:(NSDictionary *)data
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart/delete"];
+    
+    // delete product to cart
+    
+    NSString *remove_cart_item_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:remove_cart_item_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[Core encodeDictionary:data]];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *delete_product_from_cart = [session dataTaskWithRequest:request
+                                                           completionHandler:
+                                                 ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                     
+                                                     // fire request complete event
+                                                     [[NSNotificationCenter defaultCenter]
+                                                      postNotificationName:@"requestCompletedNotification"
+                                                      object:self];
+                                                     
+                                                     NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+
+                                                     if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
+                                                         
+                                                         // store response
+                                                         self.response = res;
+                                                         
+                                                         // fire event
+                                                         [[NSNotificationCenter defaultCenter]
+                                                          postNotificationName:@"productRemovedFromCartNotification"
+                                                          object:self];
+                                                         
+                                                     } else if([[res valueForKey:@"status"] isEqualToString:@"error"]) {
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                                     } else {
+                                                         NSLog(@"%@", res);
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                                     }
+                                                     
+                                                 }];
+    
+    [delete_product_from_cart resume];
+}
+
+- (void)updateItem:(NSDictionary *)data
+{
+    Service *service = [Service getInstance];
+
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/cart/update"];
+    
+    // update product in cart
+    
+    NSString *update_cart_item_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:update_cart_item_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[Core encodeDictionary:data]];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *update_product_from_cart = [session dataTaskWithRequest:request
+                                                                completionHandler:
+                                                      ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                          
+                                                          // fire request complete event
+                                                          [[NSNotificationCenter defaultCenter]
+                                                           postNotificationName:@"requestCompletedNotification"
+                                                           object:self];
+                                                          
+                                                          NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                                          NSLog(@"%@", res);
+                                                          if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
+                                                              
+                                                              // store response
+                                                              self.response = res;
+                                                              
+                                                              // fire event
+                                                              [[NSNotificationCenter defaultCenter]
+                                                               postNotificationName:@"productUpdatedInCartNotification"
+                                                               object:self];
+                                                              
+                                                          } else if([[res valueForKey:@"status"] isEqualToString:@"error"]) {
+                                                              [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                                          } else {
+                                                              NSLog(@"%@", res);
+                                                              [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                                          }
+                                                          
+                                                      }];
+    
+    [update_product_from_cart resume];
+}
+
 - (void)showAlertWithErrorMessage:(NSString *)message
 {
     if (message == nil) message = @"Something went wrong.";

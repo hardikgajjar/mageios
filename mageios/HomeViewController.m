@@ -81,10 +81,10 @@
 - (void)updateCommonStyles
 {
     // set backgroundcolor
-    [self.view setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0]];
+    [self.view setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.primaryColor"] alpha:1.0]];
     
-    // set background Image
-    if ([service.config_data valueForKeyPath:@"body.backgroundImage"] != nil) {
+    // set banner image
+    if ([service.config_data valueForKeyPath:@"body.bannerImage"] != nil) {
         UIImage *banner = [UIImage imageWithData:
                            [NSData dataWithContentsOfURL:
                             [NSURL URLWithString:[service.config_data valueForKeyPath:@"body.bannerImage"]]]];
@@ -146,14 +146,18 @@
             [icon.layer addSublayer:borderLayer];
             
             //label
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(7.5, 90, 85, 25)];
+            UIView *label_background = [[UIView alloc] initWithFrame:CGRectMake(7.5, 90, 80, 23)];
+            [label_background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0]];
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 75, 23)];
             label.backgroundColor=[UIColor clearColor];
-            label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
-            label.font=[label.font fontWithSize:13];
+            label.textColor=[UIColor whiteColor];
+            UIFont* boldFont = [UIFont boldSystemFontOfSize:12];
+            label.font=boldFont;
             label.text = [category valueForKey:@"label"];
+            [label_background addSubview:label];
             
             [background addSubview:icon];
-            [background addSubview:label];
+            [background addSubview:label_background];
 
             // bind touch gesture
             UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self

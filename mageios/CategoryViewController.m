@@ -33,6 +33,7 @@
         [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
         return;
     }
+    
     [self.loading hide:YES];
     if ([[notification name] isEqualToString:@"serviceNotification"]) {
         [self updateCommonStyles];
@@ -44,6 +45,12 @@
 
 - (void)addObservers
 {
+    
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
     // Add service observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observer:)

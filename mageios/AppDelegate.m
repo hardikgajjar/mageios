@@ -25,7 +25,6 @@
     [_revealSideViewController setOption:PPRevealSideOptionsiOS7StatusBarMoving];
     self.window.rootViewController = _revealSideViewController;
     
-    
     return YES;
 }
 

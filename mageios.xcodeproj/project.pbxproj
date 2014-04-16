@@ -31,6 +31,8 @@
 		9613A6CB18ED3DE800AF800D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9613A6CA18ED3DE800AF800D /* SystemConfiguration.framework */; };
 		96224DF218C7303200AA4EAB /* button_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 96224DF018C7303200AA4EAB /* button_down.png */; };
 		96224DF318C7303200AA4EAB /* button_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 96224DF118C7303200AA4EAB /* button_up.png */; };
+		9630126118F961C70040A6EC /* tab_cart.png in Resources */ = {isa = PBXBuildFile; fileRef = 9630126018F961C60040A6EC /* tab_cart.png */; };
+		9630126418F965440040A6EC /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9630126318F965440040A6EC /* RootViewController.m */; };
 		96308E9C18F7C7B7009ACE98 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 96308E9818F7C7B7009ACE98 /* IonIcons.m */; };
 		96308E9D18F7C7B7009ACE98 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96308E9918F7C7B7009ACE98 /* ionicons.ttf */; };
 		96308E9E18F7C7B7009ACE98 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 96308E9A18F7C7B7009ACE98 /* LICENSE */; };
@@ -120,6 +122,9 @@
 		9613A6CA18ED3DE800AF800D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		96224DF018C7303200AA4EAB /* button_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_down.png; sourceTree = "<group>"; };
 		96224DF118C7303200AA4EAB /* button_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_up.png; sourceTree = "<group>"; };
+		9630126018F961C60040A6EC /* tab_cart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_cart.png; sourceTree = "<group>"; };
+		9630126218F965440040A6EC /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		9630126318F965440040A6EC /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		96308E9618F7C7B7009ACE98 /* ionicons-codes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ionicons-codes.h"; sourceTree = "<group>"; };
 		96308E9718F7C7B7009ACE98 /* IonIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IonIcons.h; sourceTree = "<group>"; };
 		96308E9818F7C7B7009ACE98 /* IonIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IonIcons.m; sourceTree = "<group>"; };
@@ -467,6 +472,7 @@
 			children = (
 				96B5D70718A6426F003C1805 /* tab_shop.png */,
 				96224DF018C7303200AA4EAB /* button_down.png */,
+				9630126018F961C60040A6EC /* tab_cart.png */,
 				96A31B2218F820AE008C25A5 /* menu-button.png */,
 				96A31B2318F820AE008C25A5 /* menu-button@2x.png */,
 				96224DF118C7303200AA4EAB /* button_up.png */,
@@ -484,6 +490,8 @@
 				96C5EC6D18DD904200E20036 /* SelectFromListViewController.m */,
 				96A31B1F18F803DC008C25A5 /* Utility.h */,
 				96A31B2018F803DC008C25A5 /* Utility.m */,
+				9630126218F965440040A6EC /* RootViewController.h */,
+				9630126318F965440040A6EC /* RootViewController.m */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -581,6 +589,7 @@
 				96316D6918BB581D003BB5B5 /* not_selected_star.png in Resources */,
 				96308E9D18F7C7B7009ACE98 /* ionicons.ttf in Resources */,
 				960A281318A22D00000520B2 /* InfoPlist.strings in Resources */,
+				9630126118F961C70040A6EC /* tab_cart.png in Resources */,
 				96308E9F18F7C7B7009ACE98 /* README.md in Resources */,
 				96A31B2418F820AE008C25A5 /* menu-button.png in Resources */,
 				96224DF318C7303200AA4EAB /* button_up.png in Resources */,
@@ -656,6 +665,7 @@
 				96A5FCF218E58ABA00CFD770 /* PaymentViewController.m in Sources */,
 				96FF494818F2B44D00DE7EA0 /* OrderReviewViewController.m in Sources */,
 				96855A3F18AA1A32009E3514 /* CategoryViewController.m in Sources */,
+				9630126418F965440040A6EC /* RootViewController.m in Sources */,
 				96D3CF8418C8A620009F54C5 /* Product.m in Sources */,
 				96D3CF8118C89CAD009F54C5 /* ProductViewController.m in Sources */,
 				9648431518D0701600AEBB9A /* BillingViewController.m in Sources */,

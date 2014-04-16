@@ -83,6 +83,12 @@
 
 - (void)addObservers
 {
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
+    
     // Add category products load observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observer:)

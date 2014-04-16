@@ -20,5 +20,7 @@
 - (void)getData;
 - (void)getTotals;
 - (void)addToCart:(NSDictionary *)data;
+- (void)removeItem:(NSDictionary *)data;
+- (void)updateItem:(NSDictionary *)data;
 
 @end

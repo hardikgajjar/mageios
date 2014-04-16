@@ -48,9 +48,9 @@
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"orderSavedNotification"]) {
         
-        HomeViewController *homeController = [self.storyboard instantiateViewControllerWithIdentifier:@"HomeController"];
+        HomeViewController *rootController = [self.storyboard instantiateViewControllerWithIdentifier:@"RootController"];
         
-        [self presentViewController:homeController animated:YES completion:^(){
+        [self presentViewController:rootController animated:YES completion:^(){
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:nil
                                   message:[checkout.response valueForKey:@"text"]

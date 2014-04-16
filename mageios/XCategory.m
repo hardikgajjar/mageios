@@ -49,6 +49,11 @@
                                                ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                                    NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                                    
+                                                   // fire request complete event
+                                                   [[NSNotificationCenter defaultCenter]
+                                                    postNotificationName:@"requestCompletedNotification"
+                                                    object:self];
+                                                   
                                                    if ([res valueForKeyPath:@"items"] != NULL || [res valueForKeyPath:@"products"] != NULL) {
                                                        // store data
                                                        self.data = res;
@@ -175,6 +180,11 @@
                                          ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                              NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                              
+                                             // fire request complete event
+                                             [[NSNotificationCenter defaultCenter]
+                                              postNotificationName:@"requestCompletedNotification"
+                                              object:self];
+                                             
                                              if ([res valueForKeyPath:@"items"] != NULL || [res valueForKeyPath:@"products"] != NULL) {
                                                  // store data
                                                  self.data = res;
@@ -202,7 +212,7 @@
 {
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"An Error Occured"
-                          message:@"Unable to load categories."
+                          message:@"Category is empty."
                           delegate:nil
                           cancelButtonTitle:@"Dismiss"
                           otherButtonTitles:nil];
