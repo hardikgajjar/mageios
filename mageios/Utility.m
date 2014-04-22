@@ -17,7 +17,7 @@ static UIViewController *self_vc = nil;
 - (void)addLeftMenu:(UIViewController *)vc
 {
     UIImage *image = [UIImage imageNamed:@"menu-button"];
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithImage:image
+    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(showLeft)];

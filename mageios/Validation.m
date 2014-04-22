@@ -25,4 +25,12 @@
     return YES;
 }
 
++ (BOOL)validateEmptyString:(NSString *)field
+{
+    if ([field length] == 0) {
+        return NO;
+    }
+    return YES;
+}
+
 @end

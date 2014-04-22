@@ -115,7 +115,7 @@
         int i=0;
         int total_width = 0;
         int box_w = 95;
-        int box_h = 115;
+        int box_h = 120;
         int padding_l = 7.5;
         int padding_t = 7.5;
         
@@ -128,6 +128,14 @@
             UIView *background = [[UIView alloc] initWithFrame:CGRectMake(x1, 0, box_w, box_h)];
             [background setTag:[[category valueForKey:@"entity_id"] integerValue]];
             [background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.backgroundColor"] alpha:1.0]];
+            
+            CALayer *cellBorderLayer = [CALayer layer];
+            CGRect cellBorderFrame = CGRectMake(0, 0, (background.frame.size.width), (background.frame.size.height));
+            [cellBorderLayer setBackgroundColor:[[UIColor clearColor] CGColor]];
+            [cellBorderLayer setFrame:cellBorderFrame];
+            [cellBorderLayer setBorderWidth:1.0];
+            [cellBorderLayer setBorderColor:[[UIColor colorWithHex:@"#EEEBEB" alpha:1.0] CGColor]];
+            [background.layer addSublayer:cellBorderLayer];
             
             //icon
             UIImage *icon_image = [UIImage imageWithData:

@@ -10,6 +10,8 @@
 #import "Validation.h"
 #import "Customer.h"
 
+#import "RegisterViewController.h"
+
 @interface LoginViewController ()
 
 @end
@@ -83,16 +85,17 @@
     return NO;
 }
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"createAccountFromCheckoutSegue"]) {
+        RegisterViewController *nextController = segue.destinationViewController;
+        nextController.sender = sender;
+    }
 }
-*/
+
 
 - (BOOL)validateForm
 {
@@ -140,5 +143,13 @@
 }
 
 - (IBAction)forgotPassword:(id)sender {
+}
+
+- (IBAction)togglePassword:(id)sender {
+    if (self.showPassword.on) {
+        self.password.secureTextEntry = false;
+    } else {
+        self.password.secureTextEntry = true;
+    }
 }
 @end

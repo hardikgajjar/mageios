@@ -200,6 +200,7 @@
         // set sorters
         if (sorters == NULL && self.orders != NULL) {
             sorters = [[UISegmentedControl alloc] initWithFrame:CGRectMake(80, 11, 100, 30)];
+            sorters.tintColor = [UIColor grayColor];
             [sorters addTarget:self
                         action:@selector(sortBy:)
               forControlEvents:UIControlEventValueChanged];
@@ -210,6 +211,7 @@
                 [sorters insertSegmentWithTitle:[item valueForKey:@"name"]
                                         atIndex:i
                                        animated:FALSE];
+                [sorters setWidth:65.0f forSegmentAtIndex:i];
                 if ([[item valueForKey:@"_isDefault"] isEqualToString:@"1"]) {
                     [sorters setSelectedSegmentIndex:i];
                 }

@@ -35,8 +35,11 @@
     [super viewWillAppear:animated];
     
     // set tabbar color
-    [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UITabBar appearance] setBarTintColor:[UIColor colorWithHex:@"#f47727" alpha:1.0]];
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:@"#f47727" alpha:1.0]];
+    // background color
+    //[[UITabBar appearance] setBarTintColor:[UIColor colorWithHex:@"#efeff4" alpha:1.0]];
+    [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
+    
     
 //    UITabBarItem *tabBarItem = [[self.tabBar items] objectAtIndex:1];
 //    

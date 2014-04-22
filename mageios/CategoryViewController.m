@@ -180,6 +180,17 @@
     label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
     label.text = [cat valueForKey:@"label"];
     
+    
+    //border to cell
+    CALayer *cellBorderLayer = [CALayer layer];
+    CGRect cellBorderFrame = CGRectMake(0, 0, (cell.frame.size.width), (cell.frame.size.height));
+    [cellBorderLayer setBackgroundColor:[[UIColor clearColor] CGColor]];
+    [cellBorderLayer setFrame:cellBorderFrame];
+    [cellBorderLayer setBorderWidth:1.0];
+    [cellBorderLayer setBorderColor:[[UIColor colorWithHex:@"#EEEBEB" alpha:1.0] CGColor]];
+    [cell.layer addSublayer:cellBorderLayer];
+
+    
     return cell;
 }
 

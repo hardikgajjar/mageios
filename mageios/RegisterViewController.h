@@ -7,7 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
 
-@interface RegisterViewController : UITableViewController
+@interface RegisterViewController : UITableViewController <UITextFieldDelegate>
+
+@property (weak, nonatomic) IBOutlet UITextField *firstname;
+@property (weak, nonatomic) IBOutlet UITextField *lastname;
+@property (weak, nonatomic) IBOutlet UITextField *email;
+@property (weak, nonatomic) IBOutlet UITextField *password;
+@property (weak, nonatomic) IBOutlet UITextField *confirmPassword;
+@property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+
+@property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
+@property (weak, nonatomic) UIViewController *sender;
+
+- (IBAction)togglePassword:(id)sender;
+
+- (IBAction)registerCustomer:(id)sender;
 
 @end

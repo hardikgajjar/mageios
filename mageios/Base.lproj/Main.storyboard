@@ -21,9 +21,17 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAo-M2-uSG">
-                                <rect key="frame" x="10" y="302" width="300" height="115"/>
+                                <rect key="frame" x="10" y="302" width="300" height="120"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </scrollView>
+                            <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pc5-q9-NAC">
+                                <rect key="frame" x="0.0" y="64" width="320" height="230"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="jPU-Uu-DhU" kind="embed" id="j41-Ak-OMi"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -388,7 +396,6 @@
                         <outlet property="selectOptions" destination="ash-UA-9fx" id="eAH-uI-2Gh"/>
                         <outlet property="short_desc" destination="r0n-P5-ru1" id="HFP-0h-OqE"/>
                         <outlet property="stock_status" destination="2Ii-u4-Hap" id="gCO-0a-38g"/>
-                        <segue destination="U9M-8O-rHf" kind="modal" identifier="cartSegue" id="VUJ-1G-v2C"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KwD-CY-saQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -579,6 +586,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="V74-jI-77R">
                                                     <rect key="frame" x="182" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="togglePassword:" destination="ekP-BM-6pm" eventType="valueChanged" id="wct-Rf-1nt"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -671,10 +681,10 @@
             </objects>
             <point key="canvasLocation" x="2212" y="2104"/>
         </scene>
-        <!--Table View Controller - Create an Account-->
+        <!--Register View Controller - Create an Account-->
         <scene sceneID="32U-Va-NLt">
             <objects>
-                <tableViewController id="wtD-j5-LiE" sceneMemberID="viewController">
+                <tableViewController id="wtD-j5-LiE" customClass="RegisterViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Pxp-dR-liG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -694,6 +704,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="wtD-j5-LiE" id="FW3-RZ-f9t"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -710,6 +723,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="wtD-j5-LiE" id="oUh-ER-g6n"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -725,7 +741,10 @@
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="wtD-j5-LiE" id="kMF-bB-PwL"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -741,7 +760,10 @@
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="wtD-j5-LiE" id="emo-GD-pXc"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -757,7 +779,10 @@
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="wtD-j5-LiE" id="f7Z-0g-0Jb"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -781,8 +806,11 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ICf-fX-qEE">
-                                                    <rect key="frame" x="182" y="6" width="51" height="31"/>
+                                                    <rect key="frame" x="182" y="7" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="togglePassword:" destination="wtD-j5-LiE" eventType="valueChanged" id="EFj-Tu-RKO"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -804,6 +832,9 @@
                                                     <state key="normal" title="Register">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="registerCustomer:" destination="wtD-j5-LiE" eventType="touchUpInside" id="Bd3-0o-qig"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -817,8 +848,18 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Create an Account" id="xpd-Ti-jyp"/>
+                    <connections>
+                        <outlet property="confirmPassword" destination="V6K-Va-IvN" id="4sz-Se-5PL"/>
+                        <outlet property="email" destination="aQ7-ej-7Do" id="DTj-GH-8Jl"/>
+                        <outlet property="firstname" destination="Da2-o7-8k5" id="JXH-Wi-ML7"/>
+                        <outlet property="lastname" destination="UDI-B7-3gj" id="zvW-ap-qWg"/>
+                        <outlet property="password" destination="B1I-Cm-bAf" id="nCf-uL-wRN"/>
+                        <outlet property="showPassword" destination="ICf-fX-qEE" id="66T-ys-fIS"/>
+                        <segue destination="Mma-Qs-75d" kind="unwind" identifier="returntoCartSegue" unwindAction="returnFromRegister:" id="8gv-zb-sRF"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3gO-mm-eLc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Mma-Qs-75d" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1686" y="2828"/>
         </scene>
@@ -1222,6 +1263,46 @@
             </objects>
             <point key="canvasLocation" x="3235" y="1352"/>
         </scene>
+        <!--Slider View Controller-->
+        <scene sceneID="zFY-wu-GR8">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CTx-6J-zX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="jPU-Uu-DhU" customClass="SliderViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TlW-an-t7j"/>
+                        <viewControllerLayoutGuide type="bottom" id="ahr-GJ-Lk0"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="nWl-7A-gYR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="230"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vXo-dw-Yws">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="230"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="jPU-Uu-DhU" id="UIE-j4-IUQ"/>
+                                </connections>
+                            </scrollView>
+                            <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="l0P-79-hbx">
+                                <rect key="frame" x="140" y="185" width="39" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="pageIndicatorTintColor" red="0.93384850539999997" green="0.55479441510000005" blue="0.33786406330000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changePage" destination="jPU-Uu-DhU" eventType="valueChanged" id="fCW-j2-wLa"/>
+                                </connections>
+                            </pageControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <connections>
+                        <outlet property="pageControl" destination="l0P-79-hbx" id="sKn-Mm-73L"/>
+                        <outlet property="scrollView" destination="vXo-dw-Yws" id="qNH-Dg-TlY"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2150" y="3"/>
+        </scene>
     </scenes>
     <resources>
         <image name="button_down.png" width="8" height="12"/>
@@ -1236,7 +1317,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="wcQ-Gi-Tkl"/>
-        <segue reference="7Oq-8n-TIg"/>
         <segue reference="MOY-uw-UOt"/>
         <segue reference="Tqf-If-9ud"/>
     </inferredMetricsTieBreakers>

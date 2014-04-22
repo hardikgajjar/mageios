@@ -14,6 +14,7 @@
 #import "UIColor+CreateMethods.h"
 
 #import "SelectOptionsViewController.h"
+#import "PPRevealSideViewController.h"
 
 
 @interface ProductViewController ()
@@ -318,8 +319,9 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) { //view cart
-        // go to cart pages
-        [self performSegueWithIdentifier:@"cartSegue" sender:self];
+        // go to cart tab
+        UITabBarController *root = (UITabBarController *)self.revealSideViewController.rootViewController;
+        root.selectedIndex = 2;
     }
 }
 

@@ -16,6 +16,7 @@
 #import "Utility.h"
 
 #import "BillingViewController.h"
+#import "RegisterViewController.h"
 
 
 @interface CartViewController ()
@@ -141,6 +142,13 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.loading hide:NO];
+}
+
 - (void)updateCommonStyles
 {
     // set backgroundcolor
@@ -163,17 +171,20 @@
     if ([segue.identifier isEqualToString:@"billingSegue"]) {
         BillingViewController *nextController = segue.destinationViewController;
         nextController.data = sender;
+    } else if ([segue.identifier isEqualToString:@"createAccountFromCheckoutSegue"]) {
+        RegisterViewController *nextController = segue.destinationViewController;
+        nextController.sender = sender;
     }
 }
 
 - (IBAction)returnFromLogin:(UIStoryboardSegue *)segue {
-    
     customer.isLoggedIn = true;
-    
     [self checkout];
-    
 }
 
+- (IBAction)returnFromRegister:(UIStoryboardSegue *)unwindSegue
+{
+}
 
 
 #pragma mark - Table view data source
@@ -517,17 +528,18 @@
                                                 completionHandler:
                                       ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                           
-                                          [self.loading hide:YES];
+                                              [self.loading hide:YES];
+
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                           
                                           if ([[res valueForKey:@"__name"] isEqualToString:@"billing"]) {
-                                              [self saveCheckoutMethod];
-                                              
-                                              // go to /checkout again and get on which page we should
-                                              // redirect customer to, billing or shipping or anything else?
-                                              // and may be there's an error also
-                                              [self getCheckoutLandingPage];
+                                                  [self saveCheckoutMethod];
+                                                  
+                                                  // go to /checkout again and get on which page we should
+                                                  // redirect customer to, billing or shipping or anything else?
+                                                  // and may be there's an error also
+                                                  [self getCheckoutLandingPage];
                                           } else if ([[res valueForKey:@"__name"] isEqualToString:@"message"] &&
                                                      [[res valueForKey:@"status"] isEqualToString:@"error"] &&
                                                      [[res valueForKey:@"logged_in"] isEqualToString:@"0"]) {
@@ -563,7 +575,7 @@
                                                             completionHandler:
                                                   ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                                       
-                                                      [self.loading hide:YES];
+                                                          [self.loading hide:YES];
                                                       
                                                       NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                                       if (![[res valueForKey:@"status"] isEqualToString:@"success"]) {
@@ -594,7 +606,7 @@
                                                 completionHandler:
                                       ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                           
-                                          [self.loading hide:YES];
+                                              [self.loading hide:YES];
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                           NSLog(@"%@", res);

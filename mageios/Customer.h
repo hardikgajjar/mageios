@@ -17,5 +17,6 @@
 - (void)login:(NSDictionary *)data;
 - (void)logout;
 - (void)saveBillingAddress:(NSDictionary *)data;
+- (void)save:(NSDictionary *)data;
 
 @end

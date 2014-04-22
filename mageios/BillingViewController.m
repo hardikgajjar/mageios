@@ -81,7 +81,7 @@
         [self updateCommonStyles];
         
         customer = [Customer getInstance];
-        
+
         if (customer.isLoggedIn) {
             [self showBillingOptions];
         } else {
@@ -323,6 +323,8 @@
             switch (indexPath.section) {
                 case 0: // add new address
                 {
+                    // go to add new address screen
+                    [self performSegueWithIdentifier:@"addNewAddressSegue" sender:self];
                     break;
                 }
                 case 1: // select from address book
@@ -409,4 +411,9 @@
         [customer saveBillingAddress:post_data];
     }
 }
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end

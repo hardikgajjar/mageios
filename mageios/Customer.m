@@ -164,6 +164,57 @@ static Customer *instance =nil;
     [logout resume];
 }
 
+- (void)save:(NSDictionary *)data
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/customer/save"];
+    
+    // save
+    
+    NSString *save_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:save_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[Core encodeDictionary:data]];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *save_customer = [session dataTaskWithRequest:request
+                                             completionHandler:
+                                   ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                       
+                                       // fire request complete event
+                                       [[NSNotificationCenter defaultCenter]
+                                        postNotificationName:@"requestCompletedNotification"
+                                        object:self];
+                                       
+                                       NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                       
+                                       if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
+                                           
+                                           self.isLoggedIn = true;
+                                           
+                                           // fire event
+                                           [[NSNotificationCenter defaultCenter]
+                                            postNotificationName:@"RegistrationCompleteNotification"
+                                            object:self];
+                                           
+                                       } else if([[res valueForKey:@"status"] isEqualToString:@"error"]) {
+                                           [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                       } else {
+                                           NSLog(@"%@", res);
+                                           [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                       }
+                                       
+                                   }];
+    
+    [save_customer resume];
+}
+
+
 - (void)saveBillingAddress:(NSDictionary *)data
 {
     Service *service = [Service getInstance];

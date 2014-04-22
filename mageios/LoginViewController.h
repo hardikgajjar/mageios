@@ -20,4 +20,5 @@
 
 - (IBAction)login:(id)sender;
 - (IBAction)forgotPassword:(id)sender;
+- (IBAction)togglePassword:(id)sender;
 @end

@@ -12,5 +12,6 @@
 
 + (BOOL)validateEmailWithString:(NSString*)email;
 + (BOOL)validatePasswordWithString:(NSString*)password;
++ (BOOL)validateEmptyString:(NSString *)field;
 
 @end

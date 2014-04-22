@@ -47,7 +47,7 @@
         [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
         return;
     }
-    
+
     [self.loading hide:YES];
     
     if ([[notification name] isEqualToString:@"billingAddressSavedNotification"]) {

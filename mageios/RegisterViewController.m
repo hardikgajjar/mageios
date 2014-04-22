@@ -7,12 +7,19 @@
 //
 
 #import "RegisterViewController.h"
+#import "Validation.h"
+#import "Customer.h"
+
 
 @interface RegisterViewController ()
 
 @end
 
-@implementation RegisterViewController
+@implementation RegisterViewController {
+    Customer *customer;
+}
+
+@synthesize firstname,lastname,email,password,confirmPassword,showPassword;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -23,21 +30,92 @@
     return self;
 }
 
+- (void) observer:(NSNotification *) notification
+{
+    // perform ui updates from main thread so that they updates correctly
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(observer:) withObject:notification waitUntilDone:NO];
+        return;
+    }
+    
+    [self.loading hide:YES];
+    
+    if ([[notification name] isEqualToString:@"RegistrationCompleteNotification"]) {
+        // go back to cart
+        [self performSegueWithIdentifier:@"returntoCartSegue" sender:self];
+    }
+}
+
+- (void)addObservers
+{
+    // Add login observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"RegistrationCompleteNotification"
+                                               object:nil];
+    
+    // Add request completed observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"requestCompletedNotification"
+                                               object:nil];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self addObservers];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Textfield
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (BOOL)validateForm
+{
+    BOOL valid = true;
+    
+    if (![Validation validateEmailWithString:[self.email text]]) {
+        valid = false;
+        [self showAlertWithMessage:@"Email is not valid"];
+    } else if (![Validation validatePasswordWithString:[self.password text]]) {
+        valid = false;
+        [self showAlertWithMessage:@"Password must be atleast 6 characters long."];
+    } else if (![[self.confirmPassword text] isEqualToString:[self.password text]]) {
+        valid = false;
+        [self showAlertWithMessage:@"Password confirmtaion is not same as original password."];
+    } else if (![Validation validateEmptyString:[self.firstname text]]) {
+        valid = false;
+        [self showAlertWithMessage:@"Firstname can not be empty."];
+    } else if (![Validation validateEmptyString:[self.lastname text]]) {
+        valid = false;
+        [self showAlertWithMessage:@"Lastname can not be empty."];
+    }
+    return valid;
+}
+
+- (void)showAlertWithMessage:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"An Error Occured"
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    
+    [alert show];
 }
 
 /*
@@ -50,5 +128,33 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (IBAction)togglePassword:(id)sender {
+    if (self.showPassword.on) {
+        self.password.secureTextEntry = false;
+    } else {
+        self.password.secureTextEntry = true;
+    }
+}
+
+- (IBAction)registerCustomer:(id)sender {
+    
+    if ([self validateForm]) {
+        
+        // trigger post to create account
+        customer = [Customer getInstance];
+        
+        if (customer) {
+            self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.loading.labelText = @"Loading";
+            
+            // prepare post data
+            NSMutableDictionary *post_data = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"1", @"checkout_page_registration", [self.firstname text], @"firstname", [self.lastname text], @"lastname", [self.email text], @"email", [self.password text], @"password", [self.confirmPassword text], @"confirmation", nil];
+            
+            [customer save:post_data];
+        }
+    }
+}
+
 
 @end
