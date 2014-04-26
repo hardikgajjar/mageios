@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
+#import "PaypalViewController.h"
 
-@interface OrderReviewViewController : UITableViewController
+@interface OrderReviewViewController : UITableViewController <PaypalViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 

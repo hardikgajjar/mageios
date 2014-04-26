@@ -145,11 +145,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // open paypal controller
-    [self performSegueWithIdentifier:@"paypalSegue" sender:self];
+    // save this payment method
+    #warning change once server side paypal mobile is ready
+    [self savePaymentMethod:@"paypalmobile"];
 }
 
-- (void)savePaymentMethod:(NSString *)method withAuthId:(NSString *)authId
+- (void)savePaymentMethod:(NSString *)method
 {
     checkout = [Checkout getInstance];
     
@@ -160,7 +161,7 @@
         // prepare post data
         NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
         [post_data setValue:method forKey:@"payment[method]"];
-        [post_data setValue:authId forKey:@"payment[pay_id]"];
+        //[post_data setValue:authId forKey:@"payment[pay_id]"];
 
         [checkout savePayment:post_data];
     }
@@ -172,47 +173,10 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"paypalSegue"]) {
-        PaypalViewController *nextController = segue.destinationViewController;
-        nextController.title = @"PayPal";
-        nextController.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"reviewSegue"]) {
+    if ([segue.identifier isEqualToString:@"reviewSegue"]) {
         OrderReviewViewController *nextController = segue.destinationViewController;
         nextController.title = @"Order Review";
     }
-}
-
-
-#pragma mark - paypal view delegate methods
-
-- (void)paymentComplete:(PaypalViewController *)controller withResponse:(PayPalPayment *)response
-{
-    //NSLog(@"%@", [response description]);
-    
-    // confirmation has id, intent,state
-    if([[response.confirmation valueForKeyPath:@"response.state"] isEqualToString:@"approved"]) {
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setValue:[response.confirmation valueForKeyPath:@"response.id"] forKey:@"pay_id"];
-        [defaults synchronize];
-        
-        // save payment method
-        #warning change once server side paypal mobile is ready
-        [self savePaymentMethod:@"paypalmobile" withAuthId:[response.confirmation valueForKeyPath:@"response.id"]];
-        
-    } else {
-        // show error
-        
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"An Error Occured"
-                              message:@"Payment can't be authorized. Please try again later."
-                              delegate:nil
-                              cancelButtonTitle:@"Dismiss"
-                              otherButtonTitles:nil];
-        
-        [alert show];
-    }
-    
 }
 
 @end

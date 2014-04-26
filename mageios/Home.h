@@ -16,4 +16,6 @@
 @property(nonatomic,retain)NSDictionary *data;
 @property(nonatomic,retain)NSString *url;
 
++(Home *)getInstance;
+
 @end

@@ -172,8 +172,8 @@
     //NSLog(@"%@", [completedPayment description]);
     
     [self sendCompletedPaymentToServer:completedPayment]; // Payment was processed successfully; send to server for verification and fulfillment
+    
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self.delegate paymentComplete:self withResponse:completedPayment];
 }
 
 - (void)payPalPaymentDidCancel:(PayPalPaymentViewController *)paymentViewController {
@@ -186,6 +186,11 @@
 - (void)sendCompletedPaymentToServer:(PayPalPayment *)completedPayment {
     // TODO: Send completedPayment.confirmation to server
     NSLog(@"Here is your proof of payment:\n\n%@\n\nSend this to your server for confirmation and fulfillment.", completedPayment.confirmation);
+    
+    // start loading
+    [self.loading show:YES];
+    
+    [self.delegate paymentCompleteWithResponse:completedPayment];
 }
 
 /*

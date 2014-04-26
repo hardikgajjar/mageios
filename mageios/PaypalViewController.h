@@ -13,7 +13,7 @@
 @class PaypalViewController;
 
 @protocol PaypalViewDelegate <NSObject>
-- (void)paymentComplete:(PaypalViewController *)controller withResponse:(PayPalPayment *)response;
+- (void)paymentCompleteWithResponse:(PayPalPayment *)response;
 @end
 
 @interface PaypalViewController : UIViewController <PayPalPaymentDelegate>

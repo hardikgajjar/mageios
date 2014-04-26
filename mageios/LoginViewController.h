@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *email;
 @property (weak, nonatomic) IBOutlet UITextField *password;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 

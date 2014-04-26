@@ -28,6 +28,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -55,6 +57,15 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    
+    if (tabBarController.selectedIndex == 2) {
+        [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
+    }
+}
+
 
 /*
 #pragma mark - Navigation

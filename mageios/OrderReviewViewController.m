@@ -16,6 +16,8 @@
 #import "UIColor+CreateMethods.h"
 #import "Core.h"
 
+#import "PPRevealSideViewController.h"
+
 @interface OrderReviewViewController ()
 
 @end
@@ -48,18 +50,20 @@
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"orderSavedNotification"]) {
         
-        HomeViewController *rootController = [self.storyboard instantiateViewControllerWithIdentifier:@"RootController"];
+        // go to home
+        UITabBarController *root = (UITabBarController *)self.revealSideViewController.rootViewController;
+        root.selectedIndex = 0;
+        [[[root.viewControllers objectAtIndex:2] navigationController] popToRootViewControllerAnimated:NO];
         
-        [self presentViewController:rootController animated:YES completion:^(){
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:nil
-                                  message:[checkout.response valueForKey:@"text"]
-                                  delegate:self
-                                  cancelButtonTitle:@"Continue"
-                                  otherButtonTitles:nil];
-            
-            [alert show];
-        }];
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:nil
+                              message:[checkout.response valueForKey:@"text"]
+                              delegate:self
+                              cancelButtonTitle:@"Continue"
+                              otherButtonTitles:nil];
+        
+        [alert show];
+        
     }
 }
 
@@ -243,35 +247,72 @@
 }
 
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (IBAction)placeOrder:(id)sender {
-    checkout = [Checkout getInstance];
-    
-    if (checkout) {
-        
-        [self.loading show:YES];
-        
-        // prepare post data
-        NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
-        [post_data setValue:@"paypalmobile" forKey:@"payment[method]"];
-        [post_data setValue:@"1" forKey:@"agreement[1]"];
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *pay_id = [defaults valueForKey:@"pay_id"];
-        
-        [post_data setValue:pay_id forKey:@"payment[pay_id]"];
-        
-        [checkout saveOrder:post_data];
+    if ([segue.identifier isEqualToString:@"paypalSegue"]) {
+        PaypalViewController *nextController = segue.destinationViewController;
+        nextController.title = @"PayPal";
+        nextController.delegate = self;
     }
 }
+
+- (IBAction)placeOrder:(id)sender {
+    // open paypal VC
+    [self performSegueWithIdentifier:@"paypalSegue" sender:self];
+}
+
+#pragma mark - paypal view delegate methods
+
+- (void)paymentCompleteWithResponse:(PayPalPayment *)response
+{
+    //NSLog(@"%@", [response description]);
+    
+    // confirmation has id, intent,state
+    if([[response.confirmation valueForKeyPath:@"response.state"] isEqualToString:@"approved"]) {
+        
+        // show loading
+        [self.loading show:YES];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setValue:[response.confirmation valueForKeyPath:@"response.id"] forKey:@"pay_id"];
+        [defaults synchronize];
+        
+        // place order
+        checkout = [Checkout getInstance];
+        
+        if (checkout) {
+            
+            [self.loading show:YES];
+            
+            // prepare post data
+            NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
+            [post_data setValue:@"paypalmobile" forKey:@"payment[method]"];
+            [post_data setValue:@"1" forKey:@"agreement[1]"];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *pay_id = [defaults valueForKey:@"pay_id"];
+            
+            [post_data setValue:pay_id forKey:@"payment[pay_id]"];
+            
+            [checkout saveOrder:post_data];
+        }
+    } else {
+        // show error
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"An Error Occured"
+                              message:@"Payment can't be authorized. Please try again later."
+                              delegate:nil
+                              cancelButtonTitle:@"Dismiss"
+                              otherButtonTitles:nil];
+        
+        [alert show];
+    }
+    
+}
+
 @end

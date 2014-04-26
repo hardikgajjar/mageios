@@ -14,6 +14,20 @@
 
 @synthesize data,url;
 
+static Home *instance =nil;
+
++(Home *)getInstance
+{
+    @synchronized(self)
+    {
+        if(instance==nil)
+        {
+            instance= [Home new];
+        }
+    }
+    return instance;
+}
+
 - (id)init
 {
     self = [super init];

@@ -35,7 +35,7 @@
     
     if ([[notification name] isEqualToString:@"serviceNotification"]) {
         [self updateCommonStyles];
-        home = [[Home alloc] init];
+        home = [Home getInstance];
     } else if ([[notification name] isEqualToString:@"homeDataLoadedNotification"]) {
         [self updateCategories];
         [self.loading hide:YES];
@@ -65,7 +65,7 @@
     [utility addLeftMenu:self];
     
     // show loading
-    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
     self.loading.labelText = @"Loading";
     
     [self addObservers];
@@ -74,7 +74,7 @@
     
     if (service.initialized) {
         [self updateCommonStyles];
-        home = [[Home alloc] init];
+        home = [Home getInstance];
     }
 }
 
@@ -93,10 +93,11 @@
     
     // set title view
     //UIView *titleview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    UIImage *nav_icon = [UIImage imageWithData:
+    /*UIImage *nav_icon = [UIImage imageWithData:
                        [NSData dataWithContentsOfURL:
-                        [NSURL URLWithString:[service.config_data valueForKeyPath:@"navigationBar.icon"]]]];
-    UIImageView *nav_icon_view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
+                        [NSURL URLWithString:[service.config_data valueForKeyPath:@"navigationBar.icon"]]]];*/
+    UIImage *nav_icon = [UIImage imageNamed:@"logo"];
+    UIImageView *nav_icon_view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 27)];
     [nav_icon_view setImage:nav_icon];
     
     UILabel *nav_label = [[UILabel alloc] initWithFrame:CGRectMake(145, 0, 100, 30)];
@@ -114,18 +115,20 @@
     if ([home.data valueForKeyPath:@"categories.item"] != nil) {
         int i=0;
         int total_width = 0;
-        int box_w = 95;
+        float box_w = 91.5f;
         int box_h = 120;
-        int padding_l = 7.5;
-        int padding_t = 7.5;
+        float padding_l = 5.75f;
+        float padding_t = 5.75f;
         
         for (NSDictionary *category in [home.data valueForKeyPath:@"categories.item"]) {
-            int x = 95*i;
+            int x = box_w*i;
             int x1 = x;
-            if (i!=0) x1 += (i*5);
+            if (i!=0) x1 += (i*7.75f);
             
             //background view
             UIView *background = [[UIView alloc] initWithFrame:CGRectMake(x1, 0, box_w, box_h)];
+            background.layer.cornerRadius = 5.0;
+            background.layer.masksToBounds = YES;
             [background setTag:[[category valueForKey:@"entity_id"] integerValue]];
             [background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.backgroundColor"] alpha:1.0]];
             
@@ -154,11 +157,34 @@
             [icon.layer addSublayer:borderLayer];
             
             //label
-            UIView *label_background = [[UIView alloc] initWithFrame:CGRectMake(7.5, 90, 80, 23)];
+            UIView *label_background = [[UIView alloc] initWithFrame:CGRectMake(1, box_h - 23, box_w - 2, 23)];
             [label_background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0]];
+            
+            // add half rectangle
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:label_background.bounds
+                                                           byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight
+                                                                 cornerRadii:CGSizeMake(1, 1)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+            maskLayer.frame = label_background.bounds;
+            maskLayer.path = maskPath.CGPath;
+            label_background.layer.mask = maskLayer;
+            label_background.layer.masksToBounds = YES;
+            
+            // add top border
+            CGSize mainViewSize = label_background.bounds.size;
+            UIColor *borderColor = [UIColor colorWithHex:@"#d6d6d6" alpha:1.0];
+            UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainViewSize.width, 1)];
+            topView.opaque = YES;
+            topView.backgroundColor = borderColor;
+            
+            // for bonus points, set the views' autoresizing mask so they'll stay with the edges:
+            topView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+            [label_background addSubview:topView];
+            
+            
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 75, 23)];
             label.backgroundColor=[UIColor clearColor];
-            label.textColor=[UIColor whiteColor];
+            label.textColor=[UIColor grayColor];
             UIFont* boldFont = [UIFont boldSystemFontOfSize:12];
             label.font=boldFont;
             label.text = [category valueForKey:@"label"];

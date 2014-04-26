@@ -60,6 +60,7 @@
             quote.data = nil;
             quote.is_empty = true;
         } else {
+            //NSLog(@"CART: %@", quote.data);
             [[quote.data valueForKeyPath:@"products.item"] removeObjectAtIndex:last_deleted_item_id];
         }
         [self refreshCart];
@@ -146,7 +147,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.loading hide:NO];
+    [MBProgressHUD hideAllHUDsForView:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:NO];
 }
 
 - (void)updateCommonStyles
@@ -205,7 +206,7 @@
             }
             return [[quote.data valueForKeyPath:@"products.item"] count];
         case 1:
-            if ([quote.data valueForKeyPath:@"totals.total"])
+            if ([quote.data valueForKeyPath:@"totals.total"] && [[quote.data valueForKeyPath:@"products.item"] count] > 0)
                 return 1;
             else
                 return 0;
@@ -249,6 +250,8 @@
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
             NSDictionary *product;
+            
+            cell.contentView.tag = indexPath.row;
             
             if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
                 product = [quote.data valueForKeyPath:@"products.item"];
@@ -410,7 +413,7 @@
 }
 
 
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+- (void)setCustomEditing:(BOOL)editing animated:(BOOL)animated{
     [super setEditing:editing animated:animated];
 
     if (editing == false) {
@@ -443,6 +446,19 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        self.edit_btn.title = @"Done";
+        // show text box for qty
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        UILabel *qty = (UILabel *)[cell viewWithTag:60];
+        qty.hidden = true;
+        UITextView *qty_field = (UITextView *)[cell viewWithTag:50];
+        qty_field.hidden = false;
+        qty_field.text = qty.text;
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -474,10 +490,10 @@
 - (IBAction)editCart:(id)sender {
     
     if ([self.edit_btn.title isEqualToString:@"Edit"]) {
-        [self setEditing:YES animated:YES];
+        [self setCustomEditing:YES animated:YES];
         self.edit_btn.title = @"Done";
     } else {
-        [self setEditing:NO animated:YES];
+        [self setCustomEditing:NO animated:YES];
         self.edit_btn.title = @"Edit";
     }
     
@@ -528,8 +544,7 @@
                                                 completionHandler:
                                       ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                           
-                                              [self.loading hide:YES];
-
+                                          [self.loading hide:YES];
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                           
@@ -543,10 +558,10 @@
                                           } else if ([[res valueForKey:@"__name"] isEqualToString:@"message"] &&
                                                      [[res valueForKey:@"status"] isEqualToString:@"error"] &&
                                                      [[res valueForKey:@"logged_in"] isEqualToString:@"0"]) {
-                                              
+
                                               // show alert and on click go to login
                                               [self performSelectorOnMainThread:@selector(showAlertWithMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
-                                              
+
                                           }
                                           
                                       }];
@@ -575,7 +590,7 @@
                                                             completionHandler:
                                                   ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                                       
-                                                          [self.loading hide:YES];
+                                                      [self.loading hide:YES];
                                                       
                                                       NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
                                                       if (![[res valueForKey:@"status"] isEqualToString:@"success"]) {
@@ -606,10 +621,10 @@
                                                 completionHandler:
                                       ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
                                           
-                                              [self.loading hide:YES];
+                                          [self.loading hide:YES];
                                           
                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-                                          NSLog(@"%@", res);
+                                          
                                           if ([[res valueForKey:@"__name"] isEqualToString:@"billing"]) {
                                               [self performSelectorOnMainThread:@selector(redirectToBillingwithData:) withObject:res waitUntilDone:NO];
                                               return;
@@ -658,14 +673,11 @@
     if (textField.text != last_qty_value) {
         [self.loading show:YES];
         
-        CGRect location = [self.view convertRect:textField.frame toView:self.tableView];
-        NSIndexPath *path = [[self.tableView indexPathsForRowsInRect:location] objectAtIndex:0];
-
         NSDictionary *item;
         if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
             item = [quote.data valueForKeyPath:@"products.item"];
         } else {
-            item = [[quote.data valueForKeyPath:@"products.item"] objectAtIndex:path.row];
+            item = [[quote.data valueForKeyPath:@"products.item"] objectAtIndex:textField.superview.tag];
         }
         
         // prepare post data
