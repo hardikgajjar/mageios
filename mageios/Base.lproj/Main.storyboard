@@ -246,14 +246,14 @@
             <objects>
                 <tableViewController id="xPH-dj-kwU" customClass="ProductViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="X7H-XD-NCS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="Jn9-I1-yir">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="170" id="wOQ-PQ-TyJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="170"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="170"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wOQ-PQ-TyJ" id="Vtr-8c-EX3">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
@@ -306,7 +306,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="77" id="BAE-qi-Ton">
-                                        <rect key="frame" x="0.0" y="170" width="320" height="77"/>
+                                        <rect key="frame" x="0.0" y="234" width="320" height="77"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BAE-qi-Ton" id="xEu-lD-Oez">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
@@ -323,7 +323,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Vcz-nW-Ub9">
-                                        <rect key="frame" x="0.0" y="247" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="311" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vcz-nW-Ub9" id="uaT-lI-nUh">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -331,7 +331,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="gOc-ec-8iZ">
-                                        <rect key="frame" x="0.0" y="291" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="355" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gOc-ec-8iZ" id="2Je-Ns-W3w">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -349,7 +349,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ratingsCell" id="VBp-3Z-ESF">
-                                        <rect key="frame" x="0.0" y="335" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="399" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VBp-3Z-ESF" id="eCe-sE-UjS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -385,6 +385,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="PvZ-l6-r6A"/>
+                    <size key="freeformSize" width="320" height="197"/>
                     <connections>
                         <outlet property="addToCart" destination="W81-50-5Wy" id="quA-VN-HRk"/>
                         <outlet property="price" destination="mWx-VW-cB4" id="B4Z-i0-xrN"/>
@@ -407,12 +408,12 @@
             <objects>
                 <tableViewController id="nnY-cR-0hL" customClass="SelectOptionsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="B6k-vm-l9A">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="zrm-yt-aRK">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zrm-yt-aRK" id="4A5-tP-aX6">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -425,7 +426,13 @@
                             <outlet property="delegate" destination="nnY-cR-0hL" id="Qs4-1h-0Zl"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Select Options" id="LCc-f5-uOh"/>
+                    <navigationItem key="navigationItem" title="Select Options" id="LCc-f5-uOh">
+                        <barButtonItem key="rightBarButtonItem" title="Add to Cart" id="rNc-Xu-7ul">
+                            <connections>
+                                <action selector="addToCart:" destination="nnY-cR-0hL" id="Hjz-i0-D4g"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uPN-Zu-KOi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1284,9 +1291,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Tqf-If-9ud"/>
         <segue reference="wcQ-Gi-Tkl"/>
-        <segue reference="IDh-4A-a6F"/>
+        <segue reference="TN4-OE-m23"/>
         <segue reference="rID-cQ-oiT"/>
+        <segue reference="Tqf-If-9ud"/>
     </inferredMetricsTieBreakers>
 </document>

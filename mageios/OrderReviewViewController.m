@@ -194,14 +194,14 @@
             
             // set unit price
             UILabel *unit_price = (UILabel *)[cell viewWithTag:30];
-            unit_price.backgroundColor=[UIColor clearColor];
-            unit_price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+            //unit_price.backgroundColor=[UIColor clearColor];
+            //unit_price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
             unit_price.text = [product valueForKeyPath:@"formated_price._regular"];
             
             // set subtotal
             UILabel *subtotal = (UILabel *)[cell viewWithTag:40];
-            subtotal.backgroundColor=[UIColor clearColor];
-            subtotal.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+            //subtotal.backgroundColor=[UIColor clearColor];
+            //subtotal.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
             subtotal.text = [product valueForKeyPath:@"formated_subtotal._regular"];
             
             // set qty

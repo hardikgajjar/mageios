@@ -260,8 +260,8 @@
     }
 
     UILabel *price_label = (UILabel *)[cell viewWithTag:30];
-    price_label.backgroundColor=[UIColor clearColor];
-    price_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+    //price_label.backgroundColor=[UIColor clearColor];
+    //price_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
     price_label.text = price;
     
     // set ratings

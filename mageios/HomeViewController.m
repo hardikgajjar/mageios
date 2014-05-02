@@ -102,8 +102,8 @@
     
     UILabel *nav_label = [[UILabel alloc] initWithFrame:CGRectMake(145, 0, 100, 30)];
     nav_label.text = self.navigationItem.title;
-    nav_label.backgroundColor=[UIColor clearColor];
-    nav_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+    //nav_label.backgroundColor=[UIColor clearColor];
+    //nav_label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
     
     //[titleview addSubview:nav_icon_view];
     //[titleview addSubview:nav_label];
@@ -158,7 +158,7 @@
             
             //label
             UIView *label_background = [[UIView alloc] initWithFrame:CGRectMake(1, box_h - 23, box_w - 2, 23)];
-            [label_background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0]];
+            //[label_background setBackgroundColor:[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0]];
             
             // add half rectangle
             UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:label_background.bounds

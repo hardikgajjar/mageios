@@ -25,6 +25,7 @@
     Service *service;
     Product *product;
     Quote   *quote;
+    float regular_price;
 }
 
 @synthesize current_product,loading,productOptions,product_image,price,stock_status,short_desc,ratings,reviewCount,reviewText,qty,selectOptions,addToCart;
@@ -139,14 +140,16 @@
         NSDictionary *price_attributes = [self.current_product valueForKeyPath:@"price.@attributes"];
         NSString *price_text;
         
-        if ([price_attributes valueForKey:@"regular"]) price_text = [price_attributes valueForKey:@"regular"];
-        else if ([price_attributes valueForKey:@"starting_at"]) {
+        if ([price_attributes valueForKey:@"regular"]) {
+            price_text = [price_attributes valueForKey:@"regular"];
+            regular_price = [[price_attributes valueForKey:@"regular"] floatValue];
+        } else if ([price_attributes valueForKey:@"starting_at"]) {
             price_text = @"Starting At ";
             price_text = [price_text stringByAppendingString:[price_attributes valueForKey:@"starting_at"]];
         }
         
-        self.price.backgroundColor=[UIColor clearColor];
-        self.price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+        //self.price.backgroundColor=[UIColor clearColor];
+        //self.price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
         self.price.text = price_text;
         
         // set stock status
@@ -195,6 +198,24 @@
         [borderLayer setBorderWidth:1.0];
         [borderLayer setBorderColor:[[UIColor colorWithHex:[service.config_data valueForKeyPath:@"body.backgroundColor"] alpha:1.0] CGColor]];
         [self.product_image.layer addSublayer:borderLayer];
+        
+        // set price
+        NSDictionary *price_attributes = [product.data valueForKeyPath:@"price.@attributes"];
+        NSString *price_text;
+        
+        if ([price_attributes valueForKey:@"regular"]) {
+            price_text = [price_attributes valueForKey:@"regular"];
+            NSLog(@"reg : %@", product.data);
+            regular_price = [[price_attributes valueForKey:@"regular"] floatValue];
+        } else if ([price_attributes valueForKey:@"starting_at"]) {
+            price_text = @"Starting At ";
+            price_text = [price_text stringByAppendingString:[price_attributes valueForKey:@"starting_at"]];
+        }
+        
+        //self.price.backgroundColor=[UIColor clearColor];
+        //self.price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+        self.price.text = price_text;
+        
         
         // set product options
         
@@ -270,12 +291,36 @@
         // check if all required options are having values?
         for (NSArray *option in self.productOptions) {
             
-            if ([[option valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+            if ([option valueForKey:@"value"] != nil) { // has childs
                 
-                if ([option valueForKey:@"value"] == nil || [[option valueForKey:@"value"] isEqualToString:@""]) {
-                    is_valid = false;
-                    break;
+                // iterate childs and check if it is required
+                NSArray *childs = [option valueForKey:@"value"];
+                
+                if ([childs isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *child = (NSMutableDictionary *)childs;
+                    if ([[child valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                        if ([child valueForKey:@"selected_value"] == nil || [[child valueForKey:@"selected_value"] isEqualToString:@""]) {
+                            is_valid = false;
+                            break;
+                        }
+                    }
+                } else {
+                    for (NSMutableDictionary *child in childs) {
+                        if ([[child valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                            if ([child valueForKey:@"selected_value"] == nil || [[child valueForKey:@"selected_value"] isEqualToString:@""]) {
+                                is_valid = false;
+                                break;
+                            }
+                        }
+                    }
                 }
+            } else if ([[option valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+                
+                    if ([option valueForKey:@"selected_value"] == nil || [[option valueForKey:@"selected_value"] isEqualToString:@""]) {
+                        is_valid = false;
+                        break;
+                    }
+                
             }
         }
         
@@ -291,10 +336,37 @@
             
             // prepare post data
             NSMutableDictionary *post_data = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self.current_product valueForKey:@"entity_id"], @"product", self.qty.text, @"qty", nil];
-            for (NSArray *option in self.productOptions) {
-                [post_data setValue:[option valueForKey:@"value"] forKey:[option valueForKey:@"_code"]];
-            }
             
+            for (NSArray *option in self.productOptions) {
+                
+                if ([option valueForKey:@"value"] != nil) { // has childs
+                    
+                    // iterate childs and get their selected values
+                    NSArray *childs = [option valueForKey:@"value"];
+                    
+                    if ([childs isKindOfClass:[NSDictionary class]]) {
+                        
+                        NSMutableDictionary *child = (NSMutableDictionary *)childs;
+                        
+                        if ([child valueForKey:@"selected_value"] != nil) {
+                            [post_data setValue:[child valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
+                        }
+                        
+                    } else {
+                     
+                        for (NSMutableDictionary *child in childs) {
+                            if ([child valueForKey:@"selected_value"] != nil) {
+                                [post_data setValue:[child valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
+                            }
+                        }
+                    }
+                    
+                } else {
+                    [post_data setValue:[option valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
+                }
+                
+            }
+
             [quote addToCart:post_data];
             
         }
@@ -335,9 +407,13 @@
 
 #pragma mark - select options methods
 
-- (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options
+- (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options withAddToCart:(BOOL)callAddToCart
 {
     self.productOptions = options;
+
+    if (callAddToCart) {
+        [self addToCart:self];
+    }
 }
 
 @end

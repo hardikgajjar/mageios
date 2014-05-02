@@ -11,7 +11,7 @@
 @class SelectOptionsViewController;
 
 @protocol SelectOptionsViewDelegate <NSObject>
-- (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options;
+- (void)addItemViewController:(SelectOptionsViewController *)controller didFinishEnteringItem:(NSArray *)options withAddToCart:(BOOL)addToCart;
 @end
 
 @interface SelectOptionsViewController : UITableViewController <UITextFieldDelegate>
@@ -19,4 +19,5 @@
 @property(strong, nonatomic)NSArray *options;
 @property (nonatomic, weak) id <SelectOptionsViewDelegate> delegate;
 
+- (IBAction)addToCart:(id)sender;
 @end

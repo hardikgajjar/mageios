@@ -296,10 +296,10 @@
                 if (price == nil)
                 price = [[UILabel alloc] initWithFrame:CGRectMake(155, y, 80, 21)];
                 price.tag = 150+i;
-                price.backgroundColor=[UIColor clearColor];
+                //price.backgroundColor=[UIColor clearColor];
                 [price setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
                 price.text = [item valueForKeyPath:@"price._formatted_value"];
-                price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+                //price.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
                 
                 [cell.contentView addSubview:label];
                 [cell.contentView addSubview:price];

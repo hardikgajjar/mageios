@@ -64,6 +64,13 @@
     pageControlBeingUsed = NO;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.pageControl.hidden = YES;
+}
+
 - (void)updateProducts
 {
     int i = 0;
@@ -87,6 +94,7 @@
 
 - (void)updatePageControl
 {
+    self.pageControl.hidden = NO;
     [self.pageControl setFrame:CGRectMake(0, 193, 320, 2)];
     
     UIImage *activeImage = [UIImage imageNamed:@"active-page"];

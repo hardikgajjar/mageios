@@ -176,8 +176,8 @@
     
     // set label
     UILabel *label = (UILabel *)[cell viewWithTag:200];
-    label.backgroundColor=[UIColor clearColor];
-    label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
+    //label.backgroundColor=[UIColor clearColor];
+    //label.textColor=[UIColor colorWithHex:[service.config_data valueForKeyPath:@"categoryItem.tintColor"] alpha:1.0];
     label.text = [cat valueForKey:@"label"];
     
     
