@@ -263,7 +263,7 @@ static Quote *instance =nil;
                                                            object:self];
                                                           
                                                           NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-                                                          NSLog(@"%@", res);
+
                                                           if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
                                                               
                                                               // store response

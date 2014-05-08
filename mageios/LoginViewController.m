@@ -70,8 +70,8 @@
     
     [self addObservers];
     
-    UIImage *button_image = [[UIImage imageNamed:@"button"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    [self.loginBtn setBackgroundImage:button_image forState:UIControlStateNormal];
+    //UIImage *button_image = [[UIImage imageNamed:@"button"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    //[self.loginBtn setBackgroundImage:button_image forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning

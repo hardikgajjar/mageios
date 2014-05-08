@@ -56,13 +56,14 @@
     if ([[notification name] isEqualToString:@"quoteDataLoadedNotification"]) {
         [self refreshCart];
     } else if ([[notification name] isEqualToString:@"productRemovedFromCartNotification"]) {
+
         if ([[quote.data valueForKeyPath:@"products.item"] isKindOfClass:[NSDictionary class]]) {
             quote.data = nil;
             quote.is_empty = true;
         } else {
-            //NSLog(@"CART: %@", quote.data);
             [[quote.data valueForKeyPath:@"products.item"] removeObjectAtIndex:last_deleted_item_id];
         }
+
         [self refreshCart];
     } else if ([[notification name] isEqualToString:@"productUpdatedInCartNotification"]) {
         //reload data
@@ -147,6 +148,8 @@
 {
     [super viewWillDisappear:animated];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [MBProgressHUD hideAllHUDsForView:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:NO];
 }
 
@@ -481,7 +484,8 @@
     if (customer.isLoggedIn) {
         [self checkout];
     } else {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Log into Account", @"Create Account", @"Checkout as Guest", nil];
+#warning removed @"Checkout as Guest" option for now since we are using onestepcheckout and this module allows guest checkout(with username/password fields) even if we have virtual/downloadable products
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Log into Account", @"Create Account", nil];
         actionSheet.tag = 1;
         [actionSheet showInView:self.view];
     }
@@ -514,10 +518,11 @@
             [self performSegueWithIdentifier:@"createAccountFromCheckoutSegue" sender:self];
             break;
             
-        case 2:
-            // checkout as guest
-            [self checkout];
-            break;
+#warning removed @"Checkout as Guest" option for now since we are using onestepcheckout and this module allows guest checkout(with username/password fields) even if we have virtual/downloadable products
+//        case 2:
+//            // checkout as guest
+//            [self checkout];
+//            break;
             
         default:
             break;

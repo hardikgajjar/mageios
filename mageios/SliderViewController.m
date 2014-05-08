@@ -140,7 +140,8 @@
     UIImage *icon_image = [UIImage imageWithData:
                            [NSData dataWithContentsOfURL:
                             [NSURL URLWithString:[product valueForKeyPath:@"icon.@innerText"]]]];
-    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 215)];
+    
+    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 182)];
     [icon setImage:icon_image];
     [subview addSubview:icon];
     

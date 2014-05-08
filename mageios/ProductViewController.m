@@ -185,7 +185,7 @@
     //NSLog(@"%@", product.data);
     
     if (product.data != nil) {
-        NSLog(@"%@", product.data);
+        //NSLog(@"%@", product.data);
         // set icon
         UIImage *icon_image = [UIImage imageWithData:
                                [NSData dataWithContentsOfURL:
@@ -207,7 +207,6 @@
         
         if ([price_attributes valueForKey:@"regular"]) {
             price_text = [price_attributes valueForKey:@"regular"];
-            NSLog(@"reg : %@", product.data);
             regular_price = [[price_attributes valueForKey:@"regular"] floatValue];
         } else if ([price_attributes valueForKey:@"starting_at"]) {
             price_text = @"Starting At ";

@@ -197,7 +197,7 @@ static Checkout *instance =nil;
                                                object:self];
                                               
                                               NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-                                              NSLog(@"%@", res);
+                                              
                                               if ([res valueForKey:@"products"] != nil) {
                                                   
                                                   // store response

@@ -94,7 +94,7 @@ static Customer *instance =nil;
                                                       object:self];
                                                      
                                                      NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-                                                     NSLog(@"%@", res);
+                                                     
                                                      if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
                                                          
                                                          self.isLoggedIn = true;
