@@ -11,8 +11,10 @@
 @interface Checkout : NSObject
 
 @property(nonatomic,retain)NSDictionary *response;
+@property(nonatomic,retain)NSString *savedPaymentMethod;
 
 + (Checkout *)getInstance;
+- (void)getPaymentMethods;
 - (void)savePayment:(NSDictionary *)data;
 - (void)saveOrder:(NSDictionary *)data;
 - (void)orderReview;

@@ -25,6 +25,7 @@
     Service *service;
     Quote *quote;
     Checkout *checkout;
+    NSDictionary *payment_methods;
 }
 
 - (void) observer:(NSNotification *) notification
@@ -40,6 +41,10 @@
     if ([[notification name] isEqualToString:@"paymentMethodSavedNotification"]) {
         // goto order review
         [self performSegueWithIdentifier:@"reviewSegue" sender:self];
+    } else if ([[notification name] isEqualToString:@"paymentMethodsLoadedNotification"]) {
+        // show loaded methods
+        payment_methods = checkout.response;
+        [self.tableView reloadData];
     }
 }
 
@@ -50,6 +55,13 @@
                                              selector:@selector(observer:)
                                                  name:@"requestCompletedNotification"
                                                object:nil];
+
+    // Add payment methods loaded observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"paymentMethodsLoadedNotification"
+                                               object:nil];
+    
     // Add quote totals loaded observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observer:)
@@ -72,41 +84,16 @@
         
         [self updateCommonStyles];
         
-        //[self getPaymentMethods];
-        
+        if (checkout == nil) {
+            checkout = [Checkout getInstance];
+            
+            // show loading
+            self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.loading.labelText = @"Loading";
+            
+            [checkout getPaymentMethods];
+        }
     }
-}
-
-
-- (void)getPaymentMethods
-{
-    // show loading
-    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.loading.labelText = @"Loading";
-    
-    // initialize variables
-    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/checkout/paymentMethods"];
-    
-    NSString *payment_methods_url = [service.base_url stringByAppendingString:url];
-    NSURL *URL = [NSURL URLWithString:payment_methods_url];
-    
-    // prepare request with post data
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-    [request setHTTPMethod:@"POST"];
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *get_payment_methods = [session dataTaskWithRequest:request
-                                                    completionHandler:
-                                          ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
-                                              
-                                              NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
-                                              NSLog(@"%@", res);
-                                              //fields = [res valueForKey:@"field"];
-                                              //[self showMethods];
-                                              
-                                          }];
-    
-    [get_payment_methods resume];
 }
 
 - (void)updateCommonStyles
@@ -132,13 +119,32 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1;
+    if (payment_methods != nil) {
+        if ([[payment_methods valueForKey:@"method"] isKindOfClass:[NSDictionary class]]) {
+            return 1;
+        } else {
+            return [[payment_methods valueForKey:@"method"] count];
+        }
+    }
+    return 0;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"fieldCell" forIndexPath:indexPath];
+    
+    if (payment_methods != nil) {
+        if ([[payment_methods valueForKey:@"method"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *method = [payment_methods valueForKey:@"method"];
+            cell.textLabel.text = [method valueForKey:@"_label"];
+        } else {
+            NSDictionary *method = [[payment_methods valueForKey:@"method"] objectAtIndex:indexPath.row];
+            cell.textLabel.text = [method valueForKey:@"_label"];
+            
+        }
+    }
+    
     return cell;
 }
 
@@ -146,8 +152,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // save this payment method
-    #warning change once server side paypal mobile is ready
-    [self savePaymentMethod:@"paypalmobile"];
+    if ([[payment_methods valueForKey:@"method"] isKindOfClass:[NSDictionary class]]) {
+        [self savePaymentMethod:[payment_methods valueForKeyPath:@"method._code"]];
+    } else {
+        [self savePaymentMethod:[[[payment_methods valueForKey:@"method"] objectAtIndex:indexPath.row] valueForKey:@"_code"]];
+    }
 }
 
 - (void)savePaymentMethod:(NSString *)method

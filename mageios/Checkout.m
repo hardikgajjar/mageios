@@ -27,6 +27,44 @@ static Checkout *instance =nil;
     return instance;
 }
 
+- (void)getPaymentMethods
+{
+    Service *service = [Service getInstance];
+
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/checkout/paymentMethods"];
+    
+    NSString *payment_methods_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:payment_methods_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"POST"];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *get_payment_methods = [session dataTaskWithRequest:request
+                                                           completionHandler:
+                                                 ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                     
+                                                     NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                                     
+                                                     if ([[res valueForKey:@"__name"] isEqualToString:@"payment_methods"]) {
+                                                         // store response
+                                                         self.response = res;
+                                                         
+                                                         // fire event
+                                                         [[NSNotificationCenter defaultCenter]
+                                                          postNotificationName:@"paymentMethodsLoadedNotification"
+                                                          object:self];
+                                                     } else {
+                                                         NSLog(@"%@", res);
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Unable to load payment methods." waitUntilDone:NO];
+                                                     }
+                                                 }];
+    
+    [get_payment_methods resume];
+}
+
 - (void)savePayment:(NSDictionary *)data
 {
     Service *service = [Service getInstance];
@@ -60,6 +98,9 @@ static Checkout *instance =nil;
                                                           
                                                           // store response
                                                           self.response = res;
+                                                          
+                                                          // save payment method
+                                                          self.savedPaymentMethod = [data valueForKey:@"payment[method]"];
                                                           
                                                           // fire event
                                                           [[NSNotificationCenter defaultCenter]

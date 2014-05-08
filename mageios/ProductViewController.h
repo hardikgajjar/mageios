@@ -28,6 +28,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *selectOptions;
 @property (weak, nonatomic) IBOutlet UIButton *addToCart;
+@property (weak, nonatomic) IBOutlet UIView *front_demo_btn;
+@property (weak, nonatomic) IBOutlet UITableViewCell *back_demo_btn;
 
 
 - (IBAction)addToCart:(id)sender;

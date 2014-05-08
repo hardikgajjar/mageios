@@ -261,8 +261,26 @@
 }
 
 - (IBAction)placeOrder:(id)sender {
-    // open paypal VC
-    [self performSegueWithIdentifier:@"paypalSegue" sender:self];
+    if (checkout == nil) {
+        checkout = [Checkout getInstance];
+    }
+    
+    if ([checkout.savedPaymentMethod isEqualToString:@"free"]) {
+        
+        [self.loading show:YES];
+        
+        // prepare post data
+        NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
+        [post_data setValue:checkout.savedPaymentMethod forKey:@"payment[method]"];
+        [post_data setValue:@"1" forKey:@"agreement[1]"];
+        
+        [checkout saveOrder:post_data];
+        
+    } else {
+        #warning assuming we dont have only paypalmobile
+        // open paypal VC
+        [self performSegueWithIdentifier:@"paypalSegue" sender:self];
+    }
 }
 
 #pragma mark - paypal view delegate methods
@@ -290,7 +308,7 @@
             
             // prepare post data
             NSMutableDictionary *post_data = [NSMutableDictionary dictionary];
-            [post_data setValue:@"paypalmobile" forKey:@"payment[method]"];
+            [post_data setValue:checkout.savedPaymentMethod forKey:@"payment[method]"];
             [post_data setValue:@"1" forKey:@"agreement[1]"];
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

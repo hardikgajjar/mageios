@@ -26,6 +26,8 @@
     Product *product;
     Quote   *quote;
     float regular_price;
+    NSString *front_demo;
+    NSString *back_demo;
 }
 
 @synthesize current_product,loading,productOptions,product_image,price,stock_status,short_desc,ratings,reviewCount,reviewText,qty,selectOptions,addToCart;
@@ -183,7 +185,7 @@
     //NSLog(@"%@", product.data);
     
     if (product.data != nil) {
-        
+        NSLog(@"%@", product.data);
         // set icon
         UIImage *icon_image = [UIImage imageWithData:
                                [NSData dataWithContentsOfURL:
@@ -228,6 +230,26 @@
         if (self.productOptions != nil) {
             // enable select options button
             self.selectOptions.hidden = false;
+        }
+        
+        // additional_attributes
+        
+        if ([product.data valueForKey:@"additional_attributes"] != nil) {
+            
+            for (NSDictionary *attr in [product.data valueForKeyPath:@"additional_attributes.item"]) {
+                if ([[attr valueForKey:@"label"] isEqualToString:@"Frontend Demo"]) {
+                    front_demo = [attr valueForKey:@"value"];
+                } else if ([[attr valueForKey:@"label"] isEqualToString:@"Backend Demo"]) {
+                    back_demo = [attr valueForKey:@"value"];
+                }
+            }
+        }
+        
+        if (front_demo == nil || [front_demo isEqualToString:@"No"]) {
+            self.front_demo_btn.hidden = YES;
+        }
+        if (back_demo == nil || [back_demo isEqualToString:@"No"]) {
+            self.back_demo_btn.hidden = YES;
         }
         
         /*if (options != nil) {
@@ -402,6 +424,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.qty resignFirstResponder];
+
+    if (indexPath.row == 2) {
+        NSURL *URL = [NSURL URLWithString:front_demo];
+        [[UIApplication sharedApplication] openURL:URL];
+    } else if (indexPath.row == 3) {
+        NSURL *URL = [NSURL URLWithString:back_demo];
+        [[UIApplication sharedApplication] openURL:URL];
+    }
 }
 
 

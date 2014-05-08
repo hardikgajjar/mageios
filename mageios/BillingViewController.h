@@ -13,6 +13,7 @@
 
 @property(strong, nonatomic)NSDictionary *data;
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *continueBtn;
 
 - (IBAction)saveDefaultAddress:(id)sender;
 

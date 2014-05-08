@@ -94,6 +94,14 @@
 // for a customer, show saved addess(if any) and other options like add new address, select from addressbook
 - (void)showBillingOptions
 {
+    // hide continue button if there's no default address
+    if (customer.isLoggedIn && [self.data valueForKey:@"item"] != nil) {
+        self.continueBtn.enabled = true;
+    } else {
+        self.continueBtn.enabled = false;
+    }
+    
+
     [self.tableView reloadData];
 }
 

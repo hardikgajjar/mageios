@@ -36,20 +36,41 @@
 {
     [super viewWillAppear:animated];
     
+    [self setTabBarAppearance];
+}
+
+- (void)setTabBarAppearance
+{
     // set tabbar color
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:@"#f47727" alpha:1.0]];
+    //[[UITabBar appearance] setTintColor:[UIColor colorWithHex:@"#f1f1f1" alpha:1.0]];
     // background color
-    //[[UITabBar appearance] setBarTintColor:[UIColor colorWithHex:@"#efeff4" alpha:1.0]];
-    [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithHex:@"#f1f1f1" alpha:1.0]];
     
+    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tab-active.jpg"]];
     
-//    UITabBarItem *tabBarItem = [[self.tabBar items] objectAtIndex:1];
-//    
-//    UIImage *unselectedImage = [UIImage imageNamed:@"icon-unselected"];
-//    UIImage *selectedImage = [UIImage imageNamed:@"icon-selected"];
-//    
-//    [tabBarItem setImage: [unselectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-//    [tabBarItem setSelectedImage: selectedImage];
+    UITabBarItem *tabBarItem = [[self.tabBar items] objectAtIndex:0];
+    [tabBarItem setTitle:nil];
+    tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+    [tabBarItem setImage: [[UIImage imageNamed:@"tab-home"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem setSelectedImage: [[UIImage imageNamed:@"tab-home-active"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    tabBarItem = [[self.tabBar items] objectAtIndex:1];
+    [tabBarItem setTitle:nil];
+    tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+    [tabBarItem setImage: [[UIImage imageNamed:@"tab-shop"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem setSelectedImage: [[UIImage imageNamed:@"tab-shop-active"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    tabBarItem = [[self.tabBar items] objectAtIndex:2];
+    [tabBarItem setTitle:nil];
+    tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+    [tabBarItem setImage: [[UIImage imageNamed:@"tab-cart"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem setSelectedImage: [[UIImage imageNamed:@"tab-cart-active"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    tabBarItem = [[self.tabBar items] objectAtIndex:3];
+    [tabBarItem setTitle:nil];
+    tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+    [tabBarItem setImage: [[UIImage imageNamed:@"tab-about"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem setSelectedImage: [[UIImage imageNamed:@"tab-about-active"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,9 +82,9 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     
-    if (tabBarController.selectedIndex == 2) {
+    //if (tabBarController.selectedIndex == 2) {
         [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
-    }
+    //}
 }
 
 

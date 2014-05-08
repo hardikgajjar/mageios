@@ -68,7 +68,10 @@
     [super viewDidLoad];
     
     utility = [[Utility alloc] init];
-    [utility addLeftMenu:self];
+    
+    if (parent_category == nil) {
+        [utility addLeftMenu:self];
+    }
     
     // Do any additional setup after loading the view.
     
