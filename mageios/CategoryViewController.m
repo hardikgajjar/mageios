@@ -110,12 +110,16 @@
     
     if (service.initialized) {
         [self updateCommonStyles];
-        
-        if (parent_category != nil) {
-            int cat_id = [[parent_category valueForKey:@"entity_id"] integerValue];
-            category = [[XCategory alloc] initWithId:cat_id];
+        if (category) {
+            [self updateCategories];
+            [self.loading hide:YES];
         } else {
-            category = [[XCategory alloc] init];
+            if (parent_category != nil) {
+                int cat_id = [[parent_category valueForKey:@"entity_id"] integerValue];
+                category = [[XCategory alloc] initWithId:cat_id];
+            } else {
+                category = [[XCategory alloc] init];
+            }
         }
     }
     

@@ -25,7 +25,7 @@
     [_revealSideViewController setOption:PPRevealSideOptionsiOS7StatusBarMoving];
     self.window.rootViewController = _revealSideViewController;
     
-    return YES;
+    return YES; 
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

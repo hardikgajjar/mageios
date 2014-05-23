@@ -129,6 +129,10 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)updateCommonStyles
 {
     // set backgroundcolor
