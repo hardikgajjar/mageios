@@ -96,6 +96,10 @@
                                                    // store data
                                                    self.orders = [res valueForKeyPath:@"orders.item"];
                                                    
+                                                   // fire event
+                                                   [[NSNotificationCenter defaultCenter]
+                                                    postNotificationName:@"filtersLoadedNotification"
+                                                    object:self];
                                                } else {
                                                    NSLog(@"%@", res);
                                                    [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];

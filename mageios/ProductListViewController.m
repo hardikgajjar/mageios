@@ -69,6 +69,22 @@
 
         [self updateProducts];
         
+    } else if ([[notification name] isEqualToString:@"filtersLoadedNotification"]) {
+        
+        if ([[category valueForKeyPath:@"orders"] isKindOfClass:[NSDictionary class]]) {
+            self.orders = [NSArray arrayWithObjects:[category valueForKeyPath:@"orders"], nil];
+        } else {
+            self.orders = [category valueForKeyPath:@"orders"];
+        }
+        
+        if ([[category valueForKeyPath:@"filters"] isKindOfClass:[NSDictionary class]]) {
+            self.filters = [NSArray arrayWithObjects:[category valueForKeyPath:@"filters"], nil];
+        } else {
+            self.filters = [category valueForKeyPath:@"filters"];
+        }
+        
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
     } else if ([[notification name] isEqualToString:@"moreProductsLoadedNotification"]) {
         
         if ([[category valueForKeyPath:@"products"] isKindOfClass:[NSDictionary class]]) {
@@ -94,6 +110,13 @@
                                              selector:@selector(observer:)
                                                  name:@"categoryDataLoadedNotification"
                                                object:nil];
+    
+    // Add filters load observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"filtersLoadedNotification"
+                                               object:nil];
+    
     // Add more products load observer
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observer:)
@@ -127,10 +150,6 @@
             category = [[XCategory alloc] initWithId:cat_id withOffset:offset withCount:count];
         }
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)updateCommonStyles

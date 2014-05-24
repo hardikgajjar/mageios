@@ -114,11 +114,13 @@
             [self updateCategories];
             [self.loading hide:YES];
         } else {
-            if (parent_category != nil) {
-                int cat_id = [[parent_category valueForKey:@"entity_id"] integerValue];
-                category = [[XCategory alloc] initWithId:cat_id];
-            } else {
-                category = [[XCategory alloc] init];
+            if (current_category == nil) {
+                if (parent_category != nil) {
+                    int cat_id = [[parent_category valueForKey:@"entity_id"] integerValue];
+                    category = [[XCategory alloc] initWithId:cat_id];
+                } else {
+                    category = [[XCategory alloc] init];
+                }
             }
         }
     }
@@ -130,11 +132,12 @@
 {
     // fire segue for current category (if available, from home tab)
     if (self.current_category != nil) {
-        if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"categories"]) {
-            [self performSegueWithIdentifier:@"loopbackSegue" sender:self.current_category];
-        } else if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"products"]) {
-            [self performSegueWithIdentifier:@"productsListSegue" sender:self.current_category];
-        }
+        [self performSegueWithIdentifier:@"productsListSegue" sender:self.current_category];
+//        if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"categories"]) {
+//            [self performSegueWithIdentifier:@"loopbackSegue" sender:self.current_category];
+//        } else if ([[self.current_category valueForKeyPath:@"content_type"] isEqualToString:@"products"]) {
+//            [self performSegueWithIdentifier:@"productsListSegue" sender:self.current_category];
+//        }
         self.current_category = nil;
     }
 }
@@ -205,11 +208,12 @@
 {
     NSDictionary *cat = [[category.data valueForKeyPath:@"items.item"] objectAtIndex:indexPath.row];
     
-    if ([[cat valueForKeyPath:@"content_type"] isEqualToString:@"categories"]) {
-        [self performSegueWithIdentifier:@"loopbackSegue" sender:cat];
-    } else if ([[cat valueForKeyPath:@"content_type"] isEqualToString:@"products"]) {
-        [self performSegueWithIdentifier:@"productsListSegue" sender:cat];
-    }
+    [self performSegueWithIdentifier:@"productsListSegue" sender:cat];
+//    if ([[cat valueForKeyPath:@"content_type"] isEqualToString:@"categories"]) {
+//        [self performSegueWithIdentifier:@"loopbackSegue" sender:cat];
+//    } else if ([[cat valueForKeyPath:@"content_type"] isEqualToString:@"products"]) {
+//        [self performSegueWithIdentifier:@"productsListSegue" sender:cat];
+//    }
 }
 
 
