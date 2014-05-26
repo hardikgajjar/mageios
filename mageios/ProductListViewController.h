@@ -10,7 +10,7 @@
 #import "MBProgressHUD.h"
 #import "ASStarRatingView.h"
 
-@interface ProductListViewController : UITableViewController
+@interface ProductListViewController : UITableViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property(strong, nonatomic)NSDictionary *current_category;
 @property(strong, nonatomic)NSArray *products;

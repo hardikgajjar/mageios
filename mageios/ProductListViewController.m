@@ -15,15 +15,18 @@
 
 @interface ProductListViewController ()
 
+@property (strong, nonatomic) UIPickerView *pickerView;
+
 @end
 
 @implementation ProductListViewController {
     Service *service;
     XCategory *category;
-    UISegmentedControl *sorters;
+
     int lastSelectedDirection; //0=asc, 1=desc
     int offset;
     int count;
+    UIView  *pickerParentView;
 }
 
 @synthesize current_category,loading,products;
@@ -150,6 +153,36 @@
             category = [[XCategory alloc] initWithId:cat_id withOffset:offset withCount:count];
         }
     }
+    
+    // set picker for sort by
+    self.pickerView = [[UIPickerView alloc] initWithFrame:(CGRect){{0, 0}, 320, 480}];
+    self.pickerView.delegate = self;
+    self.pickerView.dataSource = self;
+    self.pickerView.backgroundColor = [UIColor colorWithHex:@"#CCCCCC" alpha:0.7];
+    UIToolbar *toolBar= [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,320,44)];
+    [toolBar setBarStyle:UIBarStyleBlackOpaque];
+    UIBarButtonItem *barButtonCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                      style:UIBarButtonItemStyleBordered target:self action:@selector(toggleSortByPicker:)];
+    barButtonCancel.tintColor=[UIColor blackColor];
+    UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                      style:UIBarButtonItemStyleBordered target:self action:@selector(sortBy:)];
+    toolBar.items = [[NSArray alloc] initWithObjects:barButtonCancel,flex,barButtonDone,nil];
+    barButtonDone.tintColor=[UIColor blackColor];
+    pickerParentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 260)];
+    pickerParentView.hidden = YES;
+    [pickerParentView addSubview:self.pickerView];
+    [pickerParentView addSubview:toolBar];
+    [self.view addSubview:pickerParentView];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // fix the picker
+    CGRect newFrame = pickerParentView.frame;
+    newFrame.origin.x = 0;
+    newFrame.origin.y = self.tableView.contentOffset.y+(self.tableView.frame.size.height-224);;
+    pickerParentView.frame = newFrame;
 }
 
 - (void)updateCommonStyles
@@ -221,26 +254,33 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         // set sorters
-        if (sorters == NULL && self.orders != NULL) {
-            sorters = [[UISegmentedControl alloc] initWithFrame:CGRectMake(80, 11, 100, 30)];
-            sorters.tintColor = [UIColor grayColor];
-            [sorters addTarget:self
-                        action:@selector(sortBy:)
-              forControlEvents:UIControlEventValueChanged];
-            [sorters setApportionsSegmentWidthsByContent:YES]; //change width of segment dynamically as per its text
+        if (self.orders != NULL) {
             
+            UILabel *sortByLabel = (UILabel *)[cell viewWithTag:20];
+            UILabel *currentShortBy = (UILabel *)[cell viewWithTag:30];
+            
+            sortByLabel.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSortByPicker:)];
+            [sortByLabel addGestureRecognizer:tapGesture];
+            
+            
+            // show default sort by
+            NSDictionary *defaultSort;
             for (int i=0; i < [self.orders count]; i++) {
                 NSDictionary *item = [self.orders objectAtIndex:i];
-                [sorters insertSegmentWithTitle:[item valueForKey:@"name"]
-                                        atIndex:i
-                                       animated:FALSE];
-                [sorters setWidth:65.0f forSegmentAtIndex:i];
                 if ([[item valueForKey:@"_isDefault"] isEqualToString:@"1"]) {
-                    [sorters setSelectedSegmentIndex:i];
+                    defaultSort = item;
                 }
             }
-            [sorters sizeToFit];
-            [cell addSubview:sorters];
+            
+            if ([defaultSort valueForKey:@"code"] != [[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]) {
+                currentShortBy.text = [[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"name"];
+            } else {
+                currentShortBy.text = [defaultSort valueForKey:@"name"];
+            }
+            
+            // set all sort by options in picker
+            [self.pickerView reloadAllComponents];
         }
         return cell;
     }
@@ -340,32 +380,34 @@
 - (void)sortBy: (id) sender
 {
     [self.loading show:YES];
-    
+
     if (lastSelectedDirection == 0)
     {
-        [category sortBy:[[self.orders objectAtIndex:[sorters selectedSegmentIndex]] valueForKey:@"code"]
+        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
                direction:@"asc"
               withOffset:offset
                withCount:count];
     }
     else
     {
-        [category sortBy:[[self.orders objectAtIndex:[sorters selectedSegmentIndex]] valueForKey:@"code"]
+        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
                direction:@"desc"
               withOffset:offset
                withCount:count];
     }
+    
+    [self toggleSortByPicker:self];
 }
 
 - (IBAction)changeSortDirection:(id)sender {
 
     [self.loading show:YES];
-
+    
     if (lastSelectedDirection == 0)
     {
         lastSelectedDirection = 1;
         [sender setImage: [UIImage imageNamed:@"button_up.png"] forState:UIControlStateNormal];
-        [category sortBy:[[self.orders objectAtIndex:[sorters selectedSegmentIndex]] valueForKey:@"code"]
+        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
                direction:@"desc"
               withOffset:offset
                withCount:count];
@@ -374,10 +416,46 @@
     {
         lastSelectedDirection = 0;
         [sender setImage:[UIImage imageNamed:@"button_down.png"] forState:UIControlStateNormal];
-        [category sortBy:[[self.orders objectAtIndex:[sorters selectedSegmentIndex]] valueForKey:@"code"]
+        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
                direction:@"asc"
               withOffset:offset
                withCount:count];
     }
 }
+
+#pragma mark PickerView DataSource
+
+- (NSInteger)numberOfComponentsInPickerView:
+(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView
+numberOfRowsInComponent:(NSInteger)component
+{
+    if (self.orders != NULL)
+        return self.orders.count;
+    else
+        return 0;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    if (self.orders != NULL)
+        return [[self.orders objectAtIndex:row] valueForKey:@"name"];
+    else
+        return nil;
+}
+
+- (IBAction)toggleSortByPicker:(id)sender
+{
+    if (pickerParentView.hidden)
+        pickerParentView.hidden = NO;
+    else
+        pickerParentView.hidden = YES;
+}
+
 @end
