@@ -10,6 +10,7 @@
 #import "Validation.h"
 #import "Customer.h"
 
+#import "CartViewController.h"
 
 @interface RegisterViewController ()
 
@@ -41,8 +42,13 @@
     [self.loading hide:YES];
     
     if ([[notification name] isEqualToString:@"RegistrationCompleteNotification"]) {
-        // go back to cart
-        [self performSegueWithIdentifier:@"returntoCartSegue" sender:self];
+        if ([self.sender isKindOfClass:[CartViewController class]]) {
+            // go back to cart
+            [self performSegueWithIdentifier:@"returntoCartSegue" sender:self];
+        } else {
+            // go to my account
+            [self performSegueWithIdentifier:@"myAccountSegue" sender:self];
+        }
     }
 }
 

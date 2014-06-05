@@ -7,6 +7,7 @@
 //
 
 #import "BillingViewController.h"
+#import "AddressbookViewController.h"
 #import "Service.h"
 #import "Customer.h"
 #import "Quote.h"
@@ -321,7 +322,7 @@
                 case 2: // select from address book
                 {
                     // go to address book screen
-                    
+                    [self performSegueWithIdentifier:@"addressBookSegue" sender:self];
                     break;
                 }
                 default:
@@ -337,6 +338,7 @@
                 }
                 case 1: // select from address book
                 {
+                    [self performSegueWithIdentifier:@"addressBookSegue" sender:self];
                     break;
                 }
                 default:
@@ -391,16 +393,23 @@
     return 44;
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"addressBookSegue"]) {
+        AddressbookViewController *nextController = segue.destinationViewController;
+        
+        if ([[self.data valueForKey:@"item"] isKindOfClass:[NSDictionary class]]) {
+            nextController.data = [NSArray arrayWithObjects:[self.data valueForKey:@"item"], nil];
+        } else {
+            nextController.data = [self.data valueForKey:@"item"];
+        }
+    }
 }
-*/
+
 
 - (IBAction)saveDefaultAddress:(id)sender {
     // save default billing address in checkout

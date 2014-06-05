@@ -8,6 +8,7 @@
 
 #import "ProductListViewController.h"
 #import "ProductViewController.h"
+#import "FilterCategoryTableViewController.h"
 #import "Service.h"
 #import "XCategory.h"
 #import "XMLDictionary.h"
@@ -69,6 +70,12 @@
         } else {
             self.products = [category valueForKeyPath:@"products"];
         }
+        
+        if ([[category valueForKeyPath:@"sub_categories"] isKindOfClass:[NSDictionary class]]) {
+            self.sub_categories = [NSArray arrayWithObjects:[category valueForKeyPath:@"sub_categories"], nil];
+        } else {
+            self.sub_categories = [category valueForKeyPath:@"sub_categories"];
+        }
 
         [self updateProducts];
         
@@ -97,6 +104,11 @@
         }
         
         [self updateProducts];
+        
+    } else if ([[notification name] isEqualToString:@"selfViewDidAppear"]) {
+        
+        NSDictionary *cat = [self.sub_categories objectAtIndex:[self.selected_sub_category intValue]];
+        [self performSegueWithIdentifier:@"productListLoopBackSegue" sender:cat];
     }
 }
 
@@ -133,7 +145,7 @@
     [super viewDidLoad];
    
     // show loading
-    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
     self.loading.labelText = @"Loading";
     
     [self addObservers];
@@ -174,6 +186,20 @@
     [pickerParentView addSubview:self.pickerView];
     [pickerParentView addSubview:toolBar];
     [self.view addSubview:pickerParentView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // fire event
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"selfViewDidAppear"
+     object:self];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -282,6 +308,12 @@
             // set all sort by options in picker
             [self.pickerView reloadAllComponents];
         }
+        
+        if (self.sub_categories == NULL) {
+            UIButton *subCatBtn = (UIButton *)[cell viewWithTag:40];
+            subCatBtn.hidden = YES;
+        }
+        
         return cell;
     }
     
@@ -367,13 +399,37 @@
 // In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    int selectedRow = [[self.tableView indexPathForSelectedRow] row];
-    
-    // set product information
-    ProductViewController *product_controller = [segue destinationViewController];
-    product_controller.title = [[self.products objectAtIndex:selectedRow] valueForKey:@"name"];
-    product_controller.current_product = [self.products objectAtIndex:selectedRow];
+    if ([segue.identifier isEqualToString:@"productDetailSegue"]) {
+        int selectedRow = [[self.tableView indexPathForSelectedRow] row];
+        
+        // set product information
+        ProductViewController *product_controller = [segue destinationViewController];
+        product_controller.title = [[self.products objectAtIndex:selectedRow] valueForKey:@"name"];
+        product_controller.current_product = [self.products objectAtIndex:selectedRow];
+    } else if ([segue.identifier isEqualToString:@"listSubCategoriesSegue"]) {
+        // set sub-categories
+        UINavigationController *navController = segue.destinationViewController;
+        FilterCategoryTableViewController *sub_categories_controller = [navController.childViewControllers objectAtIndex:0];
+        sub_categories_controller.categories = self.sub_categories;
+    } else if ([segue.identifier isEqualToString:@"productListLoopBackSegue"]) {
+        ProductListViewController *nextController = segue.destinationViewController;
+        nextController.title = [sender valueForKey:@"label"];
+        nextController.current_category = sender;
+    }
 }
+
+- (IBAction)FilterBySubCategorySelected:(UIStoryboardSegue *)unwindSegue
+{
+    // goto selected sub category
+    // Add view loaded observer
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observer:)
+                                                 name:@"selfViewDidAppear"
+                                               object:nil];
+    
+    
+}
+
 
 
 #pragma mark - segment control

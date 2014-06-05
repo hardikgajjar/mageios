@@ -57,6 +57,7 @@
                                                    if ([res valueForKeyPath:@"items"] != NULL || [res valueForKeyPath:@"products"] != NULL) {
                                                        // store data
                                                        self.data = res;
+                                                       self.sub_categories = [res valueForKeyPath:@"items.item"];
                                                        self.hasMoreItems = [res valueForKeyPath:@"category_info.has_more_items"];
                                                        
                                                        if ([res valueForKeyPath:@"products"] != NULL) {

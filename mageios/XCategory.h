@@ -15,6 +15,7 @@
 
 @property(nonatomic,retain)NSDictionary *data;
 @property(nonatomic,retain)NSMutableArray *products;
+@property(nonatomic,retain)NSArray *sub_categories;
 @property(nonatomic,retain)NSDictionary *orders;
 @property(nonatomic,retain)NSDictionary *filters;
 @property(nonatomic,retain)NSString *hasMoreItems;

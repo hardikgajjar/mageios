@@ -14,6 +14,7 @@
 @property(nonatomic,retain)NSString *savedPaymentMethod;
 
 + (Checkout *)getInstance;
+- (void)getAddressBook;
 - (void)getPaymentMethods;
 - (void)savePayment:(NSDictionary *)data;
 - (void)saveOrder:(NSDictionary *)data;

@@ -16,6 +16,8 @@
 @property(strong, nonatomic)NSArray *products;
 @property(strong, nonatomic)NSArray *orders;
 @property(strong, nonatomic)NSArray *filters;
+@property(strong, nonatomic)NSArray *sub_categories;
+@property(strong, nonatomic)NSString *selected_sub_category;
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 - (IBAction)changeSortDirection:(id)sender;
 

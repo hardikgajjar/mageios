@@ -18,5 +18,7 @@
 - (void)logout;
 - (void)saveBillingAddress:(NSDictionary *)data;
 - (void)save:(NSDictionary *)data;
+- (void)getAccountInformationForm;
+- (void)saveAccountData:(NSDictionary *)data withActionUrl:(NSString *)url;
 
 @end

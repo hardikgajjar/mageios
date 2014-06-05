@@ -27,6 +27,44 @@ static Checkout *instance =nil;
     return instance;
 }
 
+- (void)getAddressBook
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/checkout"];
+    
+    NSString *addressbook_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:addressbook_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *get_addressbook = [session dataTaskWithRequest:request
+                                                           completionHandler:
+                                                 ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                     
+                                                     NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                                     
+                                                     if ([[res valueForKey:@"__name"] isEqualToString:@"billing"]) {
+                                                         // store response
+                                                         self.response = res;
+                                                         
+                                                         // fire event
+                                                         [[NSNotificationCenter defaultCenter]
+                                                          postNotificationName:@"addressbookLoadedNotification"
+                                                          object:self];
+                                                     } else {
+                                                         NSLog(@"%@", res);
+                                                         [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:@"Unable to load address book." waitUntilDone:NO];
+                                                     }
+                                                     
+                                                 }];
+    
+    [get_addressbook resume];
+}
+
 - (void)getPaymentMethods
 {
     Service *service = [Service getInstance];

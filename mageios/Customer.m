@@ -266,6 +266,91 @@ static Customer *instance =nil;
     [save_billing_address resume];
 }
 
+- (void)getAccountInformationForm
+{
+    Service *service = [Service getInstance];
+    
+    // initialize variables
+    NSString *url = [[NSString alloc] initWithFormat:@"index.php/xmlconnect/customer/form/edit/1"];
+    
+    NSString *account_info_form_url = [service.base_url stringByAppendingString:url];
+    NSURL *URL = [NSURL URLWithString:account_info_form_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *account_info_form = [session dataTaskWithRequest:request
+                                                    completionHandler:
+                                          ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                              
+                                              NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                              
+                                              if ([[res valueForKey:@"__name"] isEqualToString:@"form"]) {
+                                                  self.response = res;
+                                                  
+                                                  // fire event
+                                                  [[NSNotificationCenter defaultCenter]
+                                                   postNotificationName:@"dashboardFormLoadedNotification"
+                                                   object:self];
+                                                  
+                                              } else {
+                                                  NSLog(@"%@", res);
+                                                  [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                              }
+                                              
+                                          }];
+    
+    [account_info_form resume];
+}
+
+- (void)saveAccountData:(NSDictionary *)data withActionUrl:(NSString *)url
+{
+    // save account info for this customer
+    
+    NSString *save_account_info_url = url;
+    NSURL *URL = [NSURL URLWithString:save_account_info_url];
+    
+    // prepare request with post data
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[Core encodeDictionary:data]];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *save_account_info = [session dataTaskWithRequest:request
+                                                            completionHandler:
+                                                  ^(NSData *remoteData, NSURLResponse *response, NSError *error) {
+                                                      
+                                                      // fire request complete event
+                                                      [[NSNotificationCenter defaultCenter]
+                                                       postNotificationName:@"requestCompletedNotification"
+                                                       object:self];
+                                                      
+                                                      NSDictionary *res = [NSDictionary dictionaryWithXMLData:remoteData];
+                                                      NSLog(@"%@", res);
+                                                      if ([[res valueForKey:@"status"] isEqualToString:@"success"]) {
+                                                          
+                                                          // store response
+                                                          self.response = res;
+                                                          
+                                                          // fire event
+                                                          [[NSNotificationCenter defaultCenter]
+                                                           postNotificationName:@"accountInfoSavedNotification"
+                                                           object:self];
+                                                          
+                                                      } else if([[res valueForKey:@"status"] isEqualToString:@"error"]) {
+                                                          [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:[res valueForKey:@"text"] waitUntilDone:NO];
+                                                      } else {
+                                                          NSLog(@"%@", res);
+                                                          [self performSelectorOnMainThread:@selector(showAlertWithErrorMessage:) withObject:nil waitUntilDone:NO];
+                                                      }
+                                                      
+                                                  }];
+    
+    [save_account_info resume];
+}
+
 
 - (void)showAlertWithErrorMessage:(NSString *)message
 {

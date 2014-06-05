@@ -9,6 +9,7 @@
 #import "MenuViewController.h"
 #import "HomeViewController.h"
 #import "LoginViewController.h"
+#import "MyAccountViewController.h"
 #import "PPRevealSideViewController.h"
 #import "Validation.h"
 #import "Customer.h"
@@ -61,7 +62,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 2;
+    if (customer.isLoggedIn)
+        return 3;
+    else
+        return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -80,6 +84,9 @@
             } else {
                 cell.textLabel.text = @"Login";
             }
+            break;
+        case 2:
+            cell.textLabel.text = @"My Account";
             break;
     }
     
@@ -117,6 +124,12 @@
             }
             
             break;
+        }
+        case 2: {
+            // go to my account
+            MyAccountViewController *accountVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MyAccountController"];
+            [(UINavigationController *)root.selectedViewController pushViewController:accountVC animated:YES];
+            [self.revealSideViewController popViewControllerAnimated:YES];
         }
     }
     
