@@ -9,6 +9,7 @@
 #import "ProductListViewController.h"
 #import "ProductViewController.h"
 #import "FilterCategoryTableViewController.h"
+#import "FilterViewController.h"
 #import "Service.h"
 #import "XCategory.h"
 #import "XMLDictionary.h"
@@ -52,7 +53,7 @@
     [self.loading hide:YES];
     
     if ([[notification name] isEqualToString:@"categoryDataLoadedNotification"]) {
-        
+
         if ([[category valueForKeyPath:@"orders"] isKindOfClass:[NSDictionary class]]) {
             self.orders = [NSArray arrayWithObjects:[category valueForKeyPath:@"orders"], nil];
         } else {
@@ -80,7 +81,6 @@
         [self updateProducts];
         
     } else if ([[notification name] isEqualToString:@"filtersLoadedNotification"]) {
-        
         if ([[category valueForKeyPath:@"orders"] isKindOfClass:[NSDictionary class]]) {
             self.orders = [NSArray arrayWithObjects:[category valueForKeyPath:@"orders"], nil];
         } else {
@@ -92,7 +92,7 @@
         } else {
             self.filters = [category valueForKeyPath:@"filters"];
         }
-        
+
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     } else if ([[notification name] isEqualToString:@"moreProductsLoadedNotification"]) {
@@ -148,8 +148,6 @@
     self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
     self.loading.labelText = @"Loading";
     
-    [self addObservers];
-    
     service = [Service getInstance];
     
     // intialize constants
@@ -191,6 +189,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self addObservers];
     
     // fire event
     [[NSNotificationCenter defaultCenter]
@@ -309,6 +309,30 @@
             [self.pickerView reloadAllComponents];
         }
         
+        // set filters
+
+        if (self.filters != NULL) {
+            UIScrollView *all_filters = (UIScrollView *)[cell viewWithTag:100];
+            int i = 0;
+            for (NSDictionary *filter in self.filters) {
+                NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14]};
+                CGSize size = [[filter valueForKey:@"name"] sizeWithAttributes:attributes];
+                
+                UILabel *filter_name = [[UILabel alloc] initWithFrame:CGRectMake(i, 8, size.width, 15)];
+                filter_name.text = [filter valueForKey:@"name"];
+                [filter_name setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
+                UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                                         initWithTarget:self action:@selector(openFilterView:)];
+                [filter_name addGestureRecognizer:tapRecognizer];
+                filter_name.userInteractionEnabled = YES;
+                
+                [all_filters addSubview:filter_name];
+                
+                i += size.width + 15;
+            }
+            all_filters.contentSize = CGSizeMake(i - 10, all_filters.frame.size.height);
+        }
+        
         if (self.sub_categories == NULL) {
             UIButton *subCatBtn = (UIButton *)[cell viewWithTag:40];
             subCatBtn.hidden = YES;
@@ -394,6 +418,11 @@
 }
 
 
+- (IBAction)openFilterView:(id)sender
+{
+    [self performSegueWithIdentifier:@"openFilterViewSegue" sender:sender];
+}
+
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
@@ -415,6 +444,20 @@
         ProductListViewController *nextController = segue.destinationViewController;
         nextController.title = [sender valueForKey:@"label"];
         nextController.current_category = sender;
+    } else if ([segue.identifier isEqualToString:@"openFilterViewSegue"]) {
+        UINavigationController *navController = segue.destinationViewController;
+        FilterViewController *nextController = [navController.childViewControllers objectAtIndex:0];
+        NSString *title = @"Filter By - ";
+        UITapGestureRecognizer *s = sender;
+        UILabel *l = (UILabel *)s.view;
+        nextController.title = [title stringByAppendingString: l.text];
+        
+        for (NSDictionary *filter in self.filters) {
+            if ([[filter valueForKey:@"name"] isEqualToString:l.text]) {
+                nextController.filter_options = [filter mutableCopy];
+                nextController.filter_code = [filter valueForKey:@"code"];
+            }
+        }
     }
 }
 
@@ -439,17 +482,19 @@
 
     if (lastSelectedDirection == 0)
     {
-        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
-               direction:@"asc"
-              withOffset:offset
-               withCount:count];
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"asc"
+                withOffset:offset
+                 withCount:count];
     }
     else
     {
-        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
-               direction:@"desc"
-              withOffset:offset
-               withCount:count];
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"desc"
+                withOffset:offset
+                 withCount:count];
     }
     
     [self toggleSortByPicker:self];
@@ -463,19 +508,21 @@
     {
         lastSelectedDirection = 1;
         [sender setImage: [UIImage imageNamed:@"button_up.png"] forState:UIControlStateNormal];
-        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
-               direction:@"desc"
-              withOffset:offset
-               withCount:count];
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"desc"
+                withOffset:offset
+                 withCount:count];
     }
     else
     {
         lastSelectedDirection = 0;
         [sender setImage:[UIImage imageNamed:@"button_down.png"] forState:UIControlStateNormal];
-        [category sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
-               direction:@"asc"
-              withOffset:offset
-               withCount:count];
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"asc"
+                withOffset:offset
+                 withCount:count];
     }
 }
 
@@ -512,6 +559,39 @@ numberOfRowsInComponent:(NSInteger)component
         pickerParentView.hidden = NO;
     else
         pickerParentView.hidden = YES;
+}
+
+# pragma mark - filter
+
+- (IBAction)applyFilter:(UIStoryboardSegue *)unwindSegue
+{
+    [self.loading show:YES];
+
+    offset = 0;
+    count = 10;
+
+    if (lastSelectedDirection == 0)
+    {
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"asc"
+                withOffset:offset
+                 withCount:count];
+    }
+    else
+    {
+        [category filterBy:self.filters
+                    sortBy:[[self.orders objectAtIndex:[self.pickerView selectedRowInComponent:0]] valueForKey:@"code"]
+                 direction:@"desc"
+                withOffset:offset
+                 withCount:count];
+    }
+    
+}
+
+- (IBAction)cancelFilter:(UIStoryboardSegue *)unwindSegue
+{
+    
 }
 
 @end

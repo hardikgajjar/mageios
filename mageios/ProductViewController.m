@@ -234,8 +234,18 @@
         // additional_attributes
         
         if ([product.data valueForKey:@"additional_attributes"] != nil) {
-            
-            for (NSDictionary *attr in [product.data valueForKeyPath:@"additional_attributes.item"]) {
+            if ([[product.data valueForKeyPath:@"additional_attributes.item"] isKindOfClass:[NSArray class]]) {
+                for (NSDictionary *attr in [product.data valueForKeyPath:@"additional_attributes.item"]) {
+                    if ([attr valueForKey:@"label"] != NULL) {
+                        if ([[attr valueForKey:@"label"] isEqualToString:@"Frontend Demo"]) {
+                            front_demo = [attr valueForKey:@"value"];
+                        } else if ([[attr valueForKey:@"label"] isEqualToString:@"Backend Demo"]) {
+                            back_demo = [attr valueForKey:@"value"];
+                        }
+                    }
+                }
+            } else {
+                NSDictionary *attr = [product.data valueForKeyPath:@"additional_attributes.item"];
                 if ([[attr valueForKey:@"label"] isEqualToString:@"Frontend Demo"]) {
                     front_demo = [attr valueForKey:@"value"];
                 } else if ([[attr valueForKey:@"label"] isEqualToString:@"Backend Demo"]) {

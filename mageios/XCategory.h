@@ -24,6 +24,6 @@
 - (id)initWithId:(int)cat_id;
 - (id)initWithId:(int)cat_id withOffset:(int)offset withCount:(int)count;
 
-- (void)sortBy:(NSString *)code direction:(NSString *)direction withOffset:(int)offset withCount:(int)count;
+- (void)filterBy:(NSArray *)filters sortBy:(NSString *)code direction:(NSString *)direction withOffset:(int)offset withCount:(int)count;
 - (id)fetchRowsWithOffset:(int)offset withCount:(int)count;
 @end

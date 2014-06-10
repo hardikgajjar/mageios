@@ -97,6 +97,8 @@
 		96ECD2811917A4F200F8DA35 /* tab-about-active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96ECD27F1917A4F200F8DA35 /* tab-about-active@2x.png */; };
 		96ECD2841917A6D700F8DA35 /* tab-cart-active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96ECD2821917A6D700F8DA35 /* tab-cart-active@2x.png */; };
 		96ECD2851917A6D700F8DA35 /* tab-cart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96ECD2831917A6D700F8DA35 /* tab-cart@2x.png */; };
+		96F3AD0619458D5F00190BF0 /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F3AD0519458D5F00190BF0 /* filter.png */; };
+		96F3AD091945D4F900190BF0 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F3AD081945D4F900190BF0 /* FilterViewController.m */; };
 		96F8A26D18EEBEAF00DB71CC /* PaypalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F8A26C18EEBEAF00DB71CC /* PaypalViewController.m */; };
 		96F8A27018EEC42F00DB71CC /* Checkout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F8A26F18EEC42F00DB71CC /* Checkout.m */; };
 		96FF494818F2B44D00DE7EA0 /* OrderReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FF494718F2B44D00DE7EA0 /* OrderReviewViewController.m */; };
@@ -248,6 +250,9 @@
 		96ECD27F1917A4F200F8DA35 /* tab-about-active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-about-active@2x.png"; sourceTree = "<group>"; };
 		96ECD2821917A6D700F8DA35 /* tab-cart-active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-cart-active@2x.png"; sourceTree = "<group>"; };
 		96ECD2831917A6D700F8DA35 /* tab-cart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-cart@2x.png"; sourceTree = "<group>"; };
+		96F3AD0519458D5F00190BF0 /* filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter.png; sourceTree = "<group>"; };
+		96F3AD071945D4F900190BF0 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
+		96F3AD081945D4F900190BF0 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		96F8A26B18EEBEAF00DB71CC /* PaypalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaypalViewController.h; sourceTree = "<group>"; };
 		96F8A26C18EEBEAF00DB71CC /* PaypalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaypalViewController.m; sourceTree = "<group>"; };
 		96F8A26E18EEC42F00DB71CC /* Checkout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checkout.h; sourceTree = "<group>"; };
@@ -444,6 +449,8 @@
 				9654042D18D306D900D55EA2 /* SelectOptionsViewController.m */,
 				96879FDA19404B3D00479723 /* FilterCategoryTableViewController.h */,
 				96879FDB19404B3D00479723 /* FilterCategoryTableViewController.m */,
+				96F3AD071945D4F900190BF0 /* FilterViewController.h */,
+				96F3AD081945D4F900190BF0 /* FilterViewController.m */,
 			);
 			name = catalog;
 			sourceTree = "<group>";
@@ -572,6 +579,7 @@
 				9630126018F961C60040A6EC /* tab_cart.png */,
 				96B5D70418A6421B003C1805 /* tab_home.png */,
 				9636CE52190BCB5600A4558F /* logo@2x.png */,
+				96F3AD0519458D5F00190BF0 /* filter.png */,
 			);
 			name = assets;
 			sourceTree = "<group>";
@@ -721,6 +729,7 @@
 				96E0882C190B82610026B9F0 /* inactive-dot.png in Resources */,
 				96E08828190B800D0026B9F0 /* active-dot.png in Resources */,
 				96316D6818BB581D003BB5B5 /* half_selected_star@2x.png in Resources */,
+				96F3AD0619458D5F00190BF0 /* filter.png in Resources */,
 				960A281C18A22D00000520B2 /* Main.storyboard in Resources */,
 				96ECD27C1917A30D00F8DA35 /* tab-shop-active@2x.png in Resources */,
 				9636CE51190BC94D00A4558F /* menu-btn@2x.png in Resources */,
@@ -788,6 +797,7 @@
 				960A284218A24551000520B2 /* XMLDictionary.m in Sources */,
 				9675DB1C18A3BC78001AD3F7 /* Service.m in Sources */,
 				96308EA518F7D658009ACE98 /* MenuViewController.m in Sources */,
+				96F3AD091945D4F900190BF0 /* FilterViewController.m in Sources */,
 				96F8A26D18EEBEAF00DB71CC /* PaypalViewController.m in Sources */,
 				96A09EA918A6066300F8055A /* Home.m in Sources */,
 				96B425C619360FCB0015FE29 /* AddressbookViewController.m in Sources */,
