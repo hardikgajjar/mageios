@@ -60,13 +60,21 @@
     // Do any additional setup after loading the view.
     
     [self addObservers];
-    
+
     pageControlBeingUsed = NO;
+    
+    
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
+    
+    int height = 182;
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    if (screenSize.height > 480.0f) height = 270; //iphone5
+    
+    [self.scrollView setFrame:CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, height)];
     
     self.pageControl.hidden = YES;
 }
@@ -95,14 +103,19 @@
 - (void)updatePageControl
 {
     self.pageControl.hidden = NO;
-    [self.pageControl setFrame:CGRectMake(0, 193, 320, 2)];
+    
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    int y = 193;
+    if (screenSize.height > 480.0f) y = 280; //iphone5
+        
+    [self.pageControl setFrame:CGRectMake(0, y, 320, 2)];
     
     UIImage *activeImage = [UIImage imageNamed:@"active-page"];
     UIImage *inactiveImage = [UIImage imageNamed:@"inactive-page"];
 
     float j = (320 - (50 * [[self.pageControl subviews] count])) / 2;
     NSMutableArray *subViews = [NSMutableArray array];
-    int count = [[self.pageControl subviews] count];
+    NSInteger count = [[self.pageControl subviews] count];
     for (int i = 0; i < count; i++)
     {
         
@@ -137,11 +150,23 @@
     [subview setTag:[[product valueForKey:@"entity_id"] integerValue]];
     
     //icon
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    NSString *icon_image_name = @"icon_iphone4.@innerText";
+    
+    if (screenSize.height > 480.0f) { //iphone5
+        icon_image_name = @"icon_iphone5.@innerText";
+    }
+    
     UIImage *icon_image = [UIImage imageWithData:
                            [NSData dataWithContentsOfURL:
-                            [NSURL URLWithString:[product valueForKeyPath:@"icon.@innerText"]]]];
+                            [NSURL URLWithString:[product valueForKeyPath:icon_image_name]]]];
+    icon_image = [UIImage imageWithCGImage:[icon_image CGImage] scale:2.0 orientation:UIImageOrientationUp];
     
-    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 182)];
+    int height = 182;
+    
+    if (screenSize.height > 480.0f) height = 270; //iphone5
+        
+    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, height)];
     [icon setImage:icon_image];
     [subview addSubview:icon];
     
@@ -151,8 +176,6 @@
     [subview addGestureRecognizer:singleFingerTap];
     
     [self.scrollView addSubview:subview];
-    
-    
 }
 
 - (void)productTap:(UITapGestureRecognizer *)recognizer {

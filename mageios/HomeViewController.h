@@ -13,5 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *home_banner;
 @property (weak, nonatomic) IBOutlet UIScrollView *categories_placeholder;
+@property (weak, nonatomic) IBOutlet UIView *container;
 @property (weak, nonatomic) IBOutlet MBProgressHUD *loading;
 @end

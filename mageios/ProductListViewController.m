@@ -110,6 +110,7 @@
         NSDictionary *cat = [self.sub_categories objectAtIndex:[self.selected_sub_category intValue]];
         [self performSegueWithIdentifier:@"productListLoopBackSegue" sender:cat];
     }
+    
 }
 
 - (void)addObservers
@@ -310,7 +311,9 @@
         }
         
         // set filters
-
+        UIView *filters_icon = (UIView *)[cell viewWithTag:110];
+        UIView *filters_separator = (UIView *)[cell viewWithTag:120];
+        
         if (self.filters != NULL) {
             UIScrollView *all_filters = (UIScrollView *)[cell viewWithTag:100];
             int i = 0;
@@ -331,11 +334,24 @@
                 i += size.width + 15;
             }
             all_filters.contentSize = CGSizeMake(i - 10, all_filters.frame.size.height);
+            
+            filters_icon.hidden = NO;
+            filters_separator.hidden = NO;
+        } else {
+            filters_icon.hidden = YES;
+            filters_separator.hidden = YES;
         }
         
+        // set sub categories
+        UIView *sub_categories_separator = (UIView *)[cell viewWithTag:130];
+        UIButton *subCatBtn = (UIButton *)[cell viewWithTag:40];
+        
         if (self.sub_categories == NULL) {
-            UIButton *subCatBtn = (UIButton *)[cell viewWithTag:40];
             subCatBtn.hidden = YES;
+            sub_categories_separator.hidden = YES;
+        } else {
+            subCatBtn.hidden = NO;
+            sub_categories_separator.hidden = NO;
         }
         
         return cell;

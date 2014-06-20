@@ -20,11 +20,11 @@
                                 <rect key="frame" x="0.0" y="79" width="320" height="197"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAo-M2-uSG">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAo-M2-uSG">
                                 <rect key="frame" x="15" y="291" width="290" height="120"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </scrollView>
-                            <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pc5-q9-NAC">
+                            <containerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pc5-q9-NAC">
                                 <rect key="frame" x="0.0" y="79" width="320" height="197"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -34,10 +34,14 @@
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CAo-M2-uSG" firstAttribute="top" secondItem="Pc5-q9-NAC" secondAttribute="bottom" constant="15" id="6MM-8b-fRC"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Home" id="fDR-ov-qlY"/>
                     <connections>
                         <outlet property="categories_placeholder" destination="CAo-M2-uSG" id="Jr3-pg-D8d"/>
+                        <outlet property="container" destination="Pc5-q9-NAC" id="oNn-fo-fCi"/>
                         <outlet property="home_banner" destination="lgV-j1-hil" id="JXS-Aj-IWl"/>
                     </connections>
                 </viewController>
@@ -234,17 +238,17 @@
                                                 <segue destination="NNc-0m-eIM" kind="modal" identifier="listSubCategoriesSegue" modalTransitionStyle="coverVertical" id="Au9-J9-B5Z"/>
                                             </connections>
                                         </button>
-                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K4z-d3-WDF">
+                                        <view tag="130" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K4z-d3-WDF">
                                             <rect key="frame" x="112" y="12" width="1" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4u-70-qiv">
+                                        <view tag="120" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4u-70-qiv">
                                             <rect key="frame" x="207" y="12" width="1" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="filter.png" translatesAutoresizingMaskIntoConstraints="NO" id="1mS-eG-bir">
+                                        <imageView userInteractionEnabled="NO" tag="110" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="filter.png" translatesAutoresizingMaskIntoConstraints="NO" id="1mS-eG-bir">
                                             <rect key="frame" x="216" y="16" width="19" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -1808,10 +1812,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rID-cQ-oiT"/>
-        <segue reference="wcQ-Gi-Tkl"/>
         <segue reference="AJ2-Y4-WYk"/>
-        <segue reference="TN4-OE-m23"/>
+        <segue reference="wcQ-Gi-Tkl"/>
         <segue reference="Tqf-If-9ud"/>
+        <segue reference="rID-cQ-oiT"/>
+        <segue reference="TN4-OE-m23"/>
     </inferredMetricsTieBreakers>
 </document>

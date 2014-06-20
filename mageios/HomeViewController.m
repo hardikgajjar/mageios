@@ -76,6 +76,19 @@
         [self updateCommonStyles];
         home = [Home getInstance];
     }
+
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    
+    if (screenSize.height > 480.0f) { //iphone5
+        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.container
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                     multiplier:0.5
+                                                                       constant:0];
+        [self.view addConstraint:constraint];
+    }
 }
 
 - (void)updateCommonStyles
