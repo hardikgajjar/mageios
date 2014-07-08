@@ -13,10 +13,20 @@
 + (NSData*)encodeDictionary:(NSDictionary*)dictionary {
     NSMutableArray *parts = [[NSMutableArray alloc] init];
     for (NSString *key in dictionary) {
-        NSString *encodedValue = [[dictionary objectForKey:key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
         NSString *encodedKey = [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSString *part = [NSString stringWithFormat: @"%@=%@", encodedKey, encodedValue];
-        [parts addObject:part];
+        
+        if ([[dictionary objectForKey:key] isKindOfClass:[NSMutableArray class]]) {
+            for (NSString *eachValue in [dictionary objectForKey:key]) {
+                NSString *encodedValue = [eachValue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSString *part = [NSString stringWithFormat: @"%@=%@", encodedKey, encodedValue];
+                [parts addObject:part];
+            }
+        } else {
+            NSString *encodedValue = [[dictionary objectForKey:key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSString *part = [NSString stringWithFormat: @"%@=%@", encodedKey, encodedValue];
+            [parts addObject:part];
+        }
     }
     NSString *encodedDictionary = [parts componentsJoinedByString:@"&"];
     return [encodedDictionary dataUsingEncoding:NSUTF8StringEncoding];

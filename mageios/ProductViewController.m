@@ -372,24 +372,35 @@
                 
                 if ([option valueForKey:@"value"] != nil) { // has childs
                     
-                    // iterate childs and get their selected values
-                    NSArray *childs = [option valueForKey:@"value"];
-                    
-                    if ([childs isKindOfClass:[NSDictionary class]]) {
+                    if ([[option valueForKey:@"_type"] isEqualToString:@"checkbox"]) {
+                        // iterate childs and get their selected values
+                        NSArray *childs = [option valueForKey:@"value"];
                         
-                        NSMutableDictionary *child = (NSMutableDictionary *)childs;
-                        
-                        if ([child valueForKey:@"selected_value"] != nil) {
-                            [post_data setValue:[child valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
-                        }
-                        
-                    } else {
-                     
-                        for (NSMutableDictionary *child in childs) {
+                        if ([childs isKindOfClass:[NSDictionary class]]) {
+                            
+                            NSMutableDictionary *child = (NSMutableDictionary *)childs;
+                            
                             if ([child valueForKey:@"selected_value"] != nil) {
                                 [post_data setValue:[child valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
                             }
+                            
+                        } else {
+                            
+                            for (NSMutableDictionary *child in childs) {
+                                if ([child valueForKey:@"selected_value"] != nil) {
+                                    if ([post_data valueForKey:[option valueForKey:@"_code"]]) {
+                                        NSMutableArray *values =[post_data valueForKey:[option valueForKey:@"_code"]];
+                                        [values addObject:[child valueForKey:@"selected_value"]];
+                                    } else {
+                                        NSMutableArray *values = [NSMutableArray arrayWithObject:[child valueForKey:@"selected_value"]];
+                                        [post_data setValue:values forKey:[option valueForKey:@"_code"]];
+                                    }
+                                }
+                            }
                         }
+                    } else if ([[option valueForKey:@"_type"] isEqualToString:@"select"]) {
+                        if ([option valueForKey:@"selected_value"])
+                            [post_data setValue:[option valueForKey:@"selected_value"] forKey:[option valueForKey:@"_code"]];
                     }
                     
                 } else {
@@ -397,7 +408,7 @@
                 }
                 
             }
-
+            NSLog(@"%@", post_data);
             [quote addToCart:post_data];
             
         }

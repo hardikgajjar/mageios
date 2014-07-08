@@ -14,8 +14,8 @@
 
 @implementation SelectOptionsViewController {
     NSMutableArray *cells;
-    BOOL isShowingList;
-    int selectedValueIndex;
+    NSMutableArray *isShowingListForSection;
+    NSInteger selectedValueIndex;
     BOOL installationSelected;
     BOOL callAddToCart;
 }
@@ -35,8 +35,6 @@
 {
     [super viewDidLoad];
     
-    
-    isShowingList = NO;
     selectedValueIndex = 0;
     installationSelected = NO;
     callAddToCart = NO;
@@ -45,6 +43,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self prepareCells];
+    isShowingListForSection = [NSMutableArray array];
+    
+    for (int i=0; i < [cells count]; i++) {
+        [isShowingListForSection insertObject:[NSNumber numberWithInt:0] atIndex:i];
+    }
+    
     [super viewWillAppear:animated];
 }
 
@@ -58,36 +62,11 @@
 
 - (void)saveEnteredValues
 {
-    // add input values back to options array
+    // add text input values back to options array
     for (int i=0; i < [self.options count]; i++) {
         NSMutableDictionary *option = [self.options objectAtIndex:i];
         
-        if ([option valueForKey:@"value"] != nil) { // has childs
-            
-            // iterate childs and set their selected values
-            NSArray *childs = [option valueForKey:@"value"];
-            
-            if ([childs isKindOfClass:[NSDictionary class]]) {
-                
-                NSMutableDictionary *child = (NSMutableDictionary *)childs;
-                
-                if (installationSelected) {
-                    [child setObject:[child valueForKey:@"_code"] forKey:@"selected_value"];
-                }
-                
-            } else {
-                
-                for (NSMutableDictionary *child in childs) {
-                    
-                    if (installationSelected) {
-                        [child setObject:[child valueForKey:@"_code"] forKey:@"selected_value"];
-                    }
-                    
-                }
-                
-            }
-            
-        } else {
+        if ([option valueForKey:@"value"] == nil) {
             [option setObject:[(UITextView *)[self.view viewWithTag:i+1] text] forKey:@"selected_value"];
         }
     }
@@ -110,7 +89,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (!isShowingList) {
+    if (![[isShowingListForSection objectAtIndex:section] intValue]) {
         return 1;
     }
 
@@ -141,9 +120,39 @@
     
     if ([[cells objectAtIndex:indexPath.section] valueForKey:@"has_items"] != nil) {
         
+        BOOL valueSelected = false;
+        
+        NSMutableDictionary *option = [self.options objectAtIndex:indexPath.section];
+        
+        if ([option valueForKey:@"value"] != nil) { // has childs
+            
+            // if option type is checkbox, it will have selected_value key if it is selected
+            // else if option type is select/radio, main option will have selected_value key
+            // and its value will be the code of its selected option
+            if ([[option valueForKey:@"_type"] isEqualToString:@"checkbox"]) {
+                NSArray *childs = [option valueForKey:@"value"];
+                if ([childs isKindOfClass:[NSDictionary class]]) {
+                    if ([childs valueForKey:@"selected_value"]) valueSelected = true;
+                } else {
+                    NSDictionary *child = [childs objectAtIndex:indexPath.row-1];
+                    if ([child valueForKey:@"selected_value"]) valueSelected = true;
+                }
+            } else if ([[option valueForKey:@"_type"] isEqualToString:@"select"]) {
+                NSArray *childs = [option valueForKey:@"value"];
+                if ([childs isKindOfClass:[NSDictionary class]]) { //single option will always be selected
+                    if ([option valueForKey:@"selected_value"]) valueSelected = true;
+                } else {
+                    if ([option valueForKey:@"selected_value"]) {
+                        NSDictionary *child = [childs objectAtIndex:indexPath.row-1];
+                        if ([[child valueForKey:@"_code"] isEqualToString:[option valueForKey:@"selected_value"]]) valueSelected = true;
+                    }
+                }
+            }
+        }
+        
         UITableViewCell *cell = [[[cells objectAtIndex:indexPath.section] valueForKey:@"childs"] objectAtIndex:(indexPath.row-1)];
         
-        if (installationSelected) {
+        if (valueSelected) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -160,14 +169,70 @@
 {
     if ([[cells objectAtIndex:indexPath.section] valueForKey:@"has_items"] != nil) {
         
-        if (isShowingList) {
+        if ([[isShowingListForSection objectAtIndex:indexPath.section] intValue]) {
             selectedValueIndex = [indexPath row];
         }
-        if (isShowingList && indexPath.row != 0) {
+        if ([[isShowingListForSection objectAtIndex:indexPath.section] intValue] && indexPath.row != 0) {
             installationSelected = !installationSelected;
         }
+        
+        // show/hide sections
         if (indexPath.row == 0) {
-            isShowingList = !isShowingList;
+            
+            int isShowingList;
+            
+            if (![[isShowingListForSection objectAtIndex:indexPath.section] intValue])
+            isShowingList = 1;
+            else
+                isShowingList = 0;
+
+            [isShowingListForSection replaceObjectAtIndex:indexPath.section withObject:[NSNumber numberWithInt:isShowingList]];
+        }
+        
+        // select/unselect options
+        if ([[isShowingListForSection objectAtIndex:indexPath.section] intValue] && indexPath.row != 0) {
+            
+            NSMutableDictionary *option = [self.options objectAtIndex:indexPath.section];
+
+            if ([option valueForKey:@"value"] != nil) { // has childs
+                
+                // if option type is checkbox, just invert its value
+                if ([[option valueForKey:@"_type"] isEqualToString:@"checkbox"]) {
+                    NSArray *childs = [option valueForKey:@"value"];
+                    NSMutableDictionary *child;
+                    if ([childs isKindOfClass:[NSDictionary class]]) {
+                        child = (NSMutableDictionary *)childs;
+                    } else {
+                        child = [childs objectAtIndex:indexPath.row - 1];
+                    }
+                    
+                    if (![child valueForKey:@"selected_value"])
+                        [child setObject:[child valueForKey:@"_code"] forKey:@"selected_value"];
+                    else
+                        [child removeObjectForKey:@"selected_value"];
+                }
+                
+                // if option type is select/radio, select the selected value and unselect all other values
+                if ([[option valueForKey:@"_type"] isEqualToString:@"select"]) {
+                    NSArray *childs = [option valueForKey:@"value"];
+
+                    if ([childs isKindOfClass:[NSDictionary class]]) {
+                        // only one option is available, so this will be always selected
+                        NSMutableDictionary *child = (NSMutableDictionary *)childs;
+                        [child setObject:[child valueForKey:@"_code"] forKey:@"selected_value"];
+                    } else {
+                        // iterate all options, set last selected value in main option
+                        for (int i=0; i<[childs count]; i++) {
+                            NSMutableDictionary *child = [childs objectAtIndex:i];
+                            
+                            if (i == (indexPath.row-1)) { //this option is selected
+                                [option setObject:[child valueForKey:@"_code"] forKey:@"selected_value"];
+                            }
+                        }
+                    }
+                }
+            }
+            
         }
         
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
@@ -189,11 +254,19 @@
         NSDictionary *option = [self.options objectAtIndex:i];
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         
+        NSString *placeholder;
+        if ([[option valueForKey:@"_is_required"] isEqualToString:@"1"]) {
+            placeholder = @"* ";
+            placeholder = [placeholder stringByAppendingString:[option valueForKey:@"_label"]];
+        } else {
+            placeholder = [option valueForKey:@"_label"];
+        }
+        
         if ([[option valueForKey:@"_type"] isEqualToString:@"text"]) {
             
             UITextField *input_field = [[UITextField alloc] initWithFrame:CGRectMake(20, 7, 280, 30)];
             input_field.tag = i+1; // start with tag 1 since 0 is already allocated
-            input_field.placeholder = [option valueForKey:@"_label"];
+            input_field.placeholder = placeholder;
             input_field.text = [option valueForKey:@"value"];
             input_field.delegate = self;
             
@@ -201,12 +274,12 @@
             
         } else if ([[option valueForKey:@"_type"] isEqualToString:@"select"]) {
 
-            [[cell textLabel] setText:[option valueForKey:@"_label"]];
+            [[cell textLabel] setText:placeholder];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
         } else if ([[option valueForKey:@"_type"] isEqualToString:@"checkbox"]) {
             //NSLog(@"%@", option);
-            [[cell textLabel] setText:[option valueForKey:@"_label"]];
+            [[cell textLabel] setText:placeholder];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
         }
@@ -239,8 +312,12 @@
                 for (int j=0; j < [childs count]; j++) {
                     
                     UITableViewCell *cell = [[UITableViewCell alloc] init];
-                    
-                    [[cell textLabel] setText:[[childs objectAtIndex:j] valueForKey:@"_label"]];
+                    NSString *label = [[childs objectAtIndex:j] valueForKey:@"_label"];
+                    if ([[childs objectAtIndex:j] valueForKey:@"_price"] != nil) {
+                        label = [label stringByAppendingString:@" +"];
+                        label = [label stringByAppendingString:[[childs objectAtIndex:j] valueForKey:@"_formated_price"]];
+                    }
+                    [[cell textLabel] setText:label];
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                     
                     [child_cells addObject:cell];
