@@ -99,6 +99,11 @@
 		96ECD2851917A6D700F8DA35 /* tab-cart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96ECD2831917A6D700F8DA35 /* tab-cart@2x.png */; };
 		96F3AD0619458D5F00190BF0 /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F3AD0519458D5F00190BF0 /* filter.png */; };
 		96F3AD091945D4F900190BF0 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F3AD081945D4F900190BF0 /* FilterViewController.m */; };
+		96F54BC7195448FC008B459F /* 120x120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F54BC6195448FC008B459F /* 120x120@2x.png */; };
+		96F54BCA195449C6008B459F /* 58x58@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F54BC8195449C6008B459F /* 58x58@2x.png */; };
+		96F54BCB195449C6008B459F /* 80x80@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F54BC9195449C6008B459F /* 80x80@2x.png */; };
+		96F54BCD19544C47008B459F /* 640x1136@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F54BCC19544C47008B459F /* 640x1136@2x.png */; };
+		96F54BCF19544D43008B459F /* 640x960@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F54BCE19544D43008B459F /* 640x960@2x.png */; };
 		96F8A26D18EEBEAF00DB71CC /* PaypalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F8A26C18EEBEAF00DB71CC /* PaypalViewController.m */; };
 		96F8A27018EEC42F00DB71CC /* Checkout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F8A26F18EEC42F00DB71CC /* Checkout.m */; };
 		96FF494818F2B44D00DE7EA0 /* OrderReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FF494718F2B44D00DE7EA0 /* OrderReviewViewController.m */; };
@@ -253,6 +258,11 @@
 		96F3AD0519458D5F00190BF0 /* filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter.png; sourceTree = "<group>"; };
 		96F3AD071945D4F900190BF0 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
 		96F3AD081945D4F900190BF0 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
+		96F54BC6195448FC008B459F /* 120x120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "120x120@2x.png"; sourceTree = "<group>"; };
+		96F54BC8195449C6008B459F /* 58x58@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "58x58@2x.png"; sourceTree = "<group>"; };
+		96F54BC9195449C6008B459F /* 80x80@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "80x80@2x.png"; sourceTree = "<group>"; };
+		96F54BCC19544C47008B459F /* 640x1136@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "640x1136@2x.png"; sourceTree = "<group>"; };
+		96F54BCE19544D43008B459F /* 640x960@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "640x960@2x.png"; sourceTree = "<group>"; };
 		96F8A26B18EEBEAF00DB71CC /* PaypalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaypalViewController.h; sourceTree = "<group>"; };
 		96F8A26C18EEBEAF00DB71CC /* PaypalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaypalViewController.m; sourceTree = "<group>"; };
 		96F8A26E18EEC42F00DB71CC /* Checkout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checkout.h; sourceTree = "<group>"; };
@@ -559,6 +569,7 @@
 		96B5D70618A64225003C1805 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				96F54BBD195445C3008B459F /* AppIcons */,
 				96ECD26719178E6E00F8DA35 /* tabs */,
 				96316D5E18BB581D003BB5B5 /* stars */,
 				96B5D70718A6426F003C1805 /* tab_shop.png */,
@@ -613,6 +624,18 @@
 				96ECD2831917A6D700F8DA35 /* tab-cart@2x.png */,
 			);
 			name = tabs;
+			sourceTree = "<group>";
+		};
+		96F54BBD195445C3008B459F /* AppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				96F54BC6195448FC008B459F /* 120x120@2x.png */,
+				96F54BC8195449C6008B459F /* 58x58@2x.png */,
+				96F54BC9195449C6008B459F /* 80x80@2x.png */,
+				96F54BCC19544C47008B459F /* 640x1136@2x.png */,
+				96F54BCE19544D43008B459F /* 640x960@2x.png */,
+			);
+			name = AppIcons;
 			sourceTree = "<group>";
 		};
 		96F8A26A18EEBE7300DB71CC /* payment methods */ = {
@@ -710,13 +733,18 @@
 				960A282118A22D00000520B2 /* Images.xcassets in Resources */,
 				96316D6C18BB581D003BB5B5 /* selected_star@2x.png in Resources */,
 				96316D6918BB581D003BB5B5 /* not_selected_star.png in Resources */,
+				96F54BCD19544C47008B459F /* 640x1136@2x.png in Resources */,
 				96308E9D18F7C7B7009ACE98 /* ionicons.ttf in Resources */,
 				960A281318A22D00000520B2 /* InfoPlist.strings in Resources */,
 				9636CE57190BD13100A4558F /* active-page@2x.png in Resources */,
 				96ECD2841917A6D700F8DA35 /* tab-cart-active@2x.png in Resources */,
 				9630126118F961C70040A6EC /* tab_cart.png in Resources */,
+				96F54BCB195449C6008B459F /* 80x80@2x.png in Resources */,
+				96F54BC7195448FC008B459F /* 120x120@2x.png in Resources */,
+				96F54BCA195449C6008B459F /* 58x58@2x.png in Resources */,
 				96ECD2771917A02C00F8DA35 /* tab-home@2x.png in Resources */,
 				96308E9F18F7C7B7009ACE98 /* README.md in Resources */,
+				96F54BCF19544D43008B459F /* 640x960@2x.png in Resources */,
 				96D01909190128E000BC8F6F /* button_up.png in Resources */,
 				96E0881F190B79BB0026B9F0 /* active.png in Resources */,
 				96D01903190128AF00BC8F6F /* button_up@2x.png in Resources */,

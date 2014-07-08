@@ -35,6 +35,7 @@ static Service *instance =nil;
         // initialize variables
         //self.base_url = @"http://10.16.16.78:8888/magento-1.8/";
         self.base_url = @"http://www.magedelight.com/beta/";
+        //self.base_url = @"http://www.magedelight.com/";
 
         self.url_init = [base_url stringByAppendingString:@"index.php/xmlconnect/configuration/index/app_code/defiph1/screen_size/320%C3%97480"];
         self.initialized = FALSE;

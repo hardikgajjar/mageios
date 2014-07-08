@@ -114,7 +114,16 @@
         _payPalConfiguration.languageOrLocale = [NSLocale preferredLanguages][0];
         
         // use default environment, should be Production in real life
-        self.environment = kPayPalEnvironment;
+        
+        //get the credentials from user data
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *testMode = [defaults objectForKey:@"_test_mode"];
+        NSLog(@"mode:%@", testMode);
+        if ([testMode isEqualToString:@"1"]) {
+            self.environment = PayPalEnvironmentSandbox;
+        } else {
+            self.environment = PayPalEnvironmentProduction;
+        }
         
     }
 }
@@ -128,9 +137,16 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    //get the credentials from user data
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *sandbox_client_id = [defaults objectForKey:@"_sandbox_client_id"];
+    NSString *live_client_id = [defaults objectForKey:@"_live_client_id"];
+    NSLog(@"sandbox:%@", sandbox_client_id);
+    NSLog(@"live:%@", live_client_id);
+    
     // initialize paypal sdk
-    [PayPalMobile initializeWithClientIdsForEnvironments:@{PayPalEnvironmentProduction : @"YOUR_CLIENT_ID_FOR_PRODUCTION",
-                                                           PayPalEnvironmentSandbox : @"AT0aHRB6pFxfdhUQn5GPi7CfaYlHbeJpXFKjkt-PkvG3RCWTLDv0vF9pS9oQ"}];
+    [PayPalMobile initializeWithClientIdsForEnvironments:@{PayPalEnvironmentProduction : live_client_id,
+                                                           PayPalEnvironmentSandbox : sandbox_client_id}];
     
     // Start out working with the test environment! When you are ready, switch to PayPalEnvironmentProduction.
     [PayPalMobile preconnectWithEnvironment:self.environment];

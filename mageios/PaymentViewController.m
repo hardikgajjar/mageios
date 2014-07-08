@@ -154,8 +154,30 @@
     // save this payment method
     if ([[payment_methods valueForKey:@"method"] isKindOfClass:[NSDictionary class]]) {
         [self savePaymentMethod:[payment_methods valueForKeyPath:@"method._code"]];
+        
+        // save credentials of this payment method (if available)
+        [self savePaymentMethodCredentialsFromData:payment_methods];
+        
     } else {
         [self savePaymentMethod:[[[payment_methods valueForKey:@"method"] objectAtIndex:indexPath.row] valueForKey:@"_code"]];
+        
+        // save credentials of this payment method (if available)
+        [self savePaymentMethodCredentialsFromData:[[payment_methods valueForKey:@"method"] objectAtIndex:indexPath.row]];
+    }
+}
+
+- (void)savePaymentMethodCredentialsFromData:(NSDictionary *)payment_method
+{
+    if ([payment_methods valueForKeyPath:@"method.credentials"]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._test_mode"] forKey:@"_test_mode"];
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._live_client_id"] forKey:@"_live_client_id"];
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._live_client_secret"] forKey:@"_live_client_secret"];
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._sandbox_client_id"] forKey:@"_sandbox_client_id"];
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._sandbox_client_secret"] forKey:@"_sandbox_client_secret"];
+        
+        [defaults synchronize];
     }
 }
 

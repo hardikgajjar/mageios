@@ -122,6 +122,41 @@
                     <view key="view" contentMode="scaleToFill" id="4l2-91-FYk">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DAY-R6-0Cj">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">MageDelight.com is the gateway to an extensive range of Magento extensions that provides innovative solutions for the Magento Platform. With 10 years of experience in eCommerce and 5 years in Magento, we are committed to providing the best Magento extensions to take our client's business to the next level.
+
+Our enthusiastic and professional customer support team provides you extensive support during installation of either our own product or your own custom Magento extension. If required, our team can even custom deliver an extension that is suited to your needs. At MageDelight.com, we are continually improving our products and coming up with the latest solutions, so that we can provide the most effective answers for your eCommerce business requisites.
+
+MageDelight.com – The Topmost Magento Extension Provider
+
+At MageDelight.com, we always choose to be the best. Our state-of-the art extensions always go a long way in meeting the customer's needs. Being at the forefront of the ever evolving digital markets, we understand that the eCommerce environment is always changing. We always remain at the forefront with a sharpened edge, to provide what our customers feel are the most useful and updated extensions.
+
+Obtain Free lifetime support and updates from MageDelight.com
+
+At MageDelight.com, it is our top priority to achieve the highest levels of customer satisfaction. We take delight in achieving yet another initiative - lifetime support and updates for free. We have to our credit a sophisticated and experienced extensions development and support team that offers the most advanced levels of after-sales service. We perfectly adapt to your requests to achieve what you want realistically.
+
+Magedelight.Com Provides Complete Guides And Demos
+
+Magedelight.com provides a set of complete guides along with each and every extension that it launches. This includes developer guides, user guides, installation guides, and demonstration tips. It is our concrete belief that customers should spend their crucial time in managing their business and thereby succeed, rather than fumbling with a newly installed extension.
+
+Our Perpetual Trust
+
+We are a trustful and dedicated company with a team of professionals ever ready to assist you with any issue! Please let us know if you have any issues and we will be ready to solve it for you!</string>
+                                        <attributes>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="About Us" id="pLx-u0-0jp"/>
@@ -1090,26 +1125,6 @@
                                             <segue destination="4QS-ag-vg3" kind="push" id="vhs-5Z-iao"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="EXR-tK-SX3" style="IBUITableViewCellStyleDefault" id="kX1-19-SdR">
-                                        <rect key="frame" x="0.0" y="152" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kX1-19-SdR" id="11Y-ur-hI8">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Address Book" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EXR-tK-SX3">
-                                                    <rect key="frame" x="15" y="0.0" width="270" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="W0O-oK-h03" kind="push" identifier="myAddressBookSegue" id="89Z-c6-MVc"/>
-                                        </connections>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1221,35 +1236,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rb9-8y-eAp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3281" y="3336"/>
-        </scene>
-        <!--Table View Controller - Address Book-->
-        <scene sceneID="1Fw-aZ-l1B">
-            <objects>
-                <tableViewController id="W0O-oK-h03" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="pPy-cm-ZPI">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="0In-o9-yts">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0In-o9-yts" id="PB8-YH-unR">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="W0O-oK-h03" id="xOk-Zp-JmC"/>
-                            <outlet property="delegate" destination="W0O-oK-h03" id="24v-sI-Phn"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Address Book" id="j1t-NS-dIn"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LZb-8j-GIj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3281" y="4066"/>
         </scene>
         <!--New Address View Controller - Add New Address-->
         <scene sceneID="PIi-nt-D8h">
