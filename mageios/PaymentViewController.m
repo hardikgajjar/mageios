@@ -88,7 +88,8 @@
             checkout = [Checkout getInstance];
             
             // show loading
-            self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
+            //self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             self.loading.labelText = @"Loading";
             
             [checkout getPaymentMethods];
@@ -176,6 +177,7 @@
         [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._live_client_secret"] forKey:@"_live_client_secret"];
         [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._sandbox_client_id"] forKey:@"_sandbox_client_id"];
         [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._sandbox_client_secret"] forKey:@"_sandbox_client_secret"];
+        [defaults setValue:[payment_method valueForKeyPath:@"method.credentials._accept_credit_card"] forKey:@"_accept_credit_card"];
         
         [defaults synchronize];
     }

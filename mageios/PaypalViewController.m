@@ -92,11 +92,21 @@
         
         [self updateCommonStyles];
         
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
         // Set up payPalConfig
         _payPalConfiguration = [[PayPalConfiguration alloc] init];
-        _payPalConfiguration.acceptCreditCards = YES;
+        
+        NSString *acceptCreditCards = [defaults objectForKey:@"_accept_credit_card"];
+        
+        if ([acceptCreditCards isEqualToString:@"1"]) {
+            _payPalConfiguration.acceptCreditCards = YES;
+        } else {
+            _payPalConfiguration.acceptCreditCards = NO;
+        }
+        
         _payPalConfiguration.languageOrLocale = @"en";
-        _payPalConfiguration.merchantName = @"Awesome Shirts, Inc.";
+        _payPalConfiguration.merchantName = @"MageDelight";
         _payPalConfiguration.merchantPrivacyPolicyURL = [NSURL URLWithString:@"https://www.paypal.com/webapps/mpp/ua/privacy-full"];
         _payPalConfiguration.merchantUserAgreementURL = [NSURL URLWithString:@"https://www.paypal.com/webapps/mpp/ua/useragreement-full"];
         
@@ -116,7 +126,6 @@
         // use default environment, should be Production in real life
         
         //get the credentials from user data
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *testMode = [defaults objectForKey:@"_test_mode"];
         NSLog(@"mode:%@", testMode);
         if ([testMode isEqualToString:@"1"]) {

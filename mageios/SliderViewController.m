@@ -66,9 +66,9 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewDidLayoutSubviews
 {
-    [super viewDidAppear:animated];
+    [super viewDidLayoutSubviews];
     
     int height = 182;
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;

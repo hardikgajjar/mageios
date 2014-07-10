@@ -92,7 +92,8 @@
     [super viewDidLoad];
     
     // show loading
-    self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.loading = [MBProgressHUD showHUDAddedTo:[[[UIApplication sharedApplication] windows] objectAtIndex:0] animated:YES];
+    //self.loading = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.loading.labelText = @"Loading";
     
     [self addObservers];
